@@ -6,11 +6,13 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.archive_master.test" %>
 <html>
   <head>
     <title>$Title$</title>
   </head>
   <body>
-  $END$
+    <h1>Below should say Hello World</h1>
+    <%= test.getMessage()%>
   </body>
 </html>
