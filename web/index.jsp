@@ -7,6 +7,8 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.archive_master.test" %>
+<%@ page import="com.archive_master.fedora_test" %>
+
 <html>
   <head>
     <title>$Title$</title>
@@ -15,4 +17,8 @@
     <h1>Below should say Hello World</h1>
     <%= test.getMessage()%>
   </body>
+
+  <form action="/fedora_test" method="doPost">
+    <button type="submit" name="button" value="button1">Test API Connection</button>
+  </form>
 </html>
