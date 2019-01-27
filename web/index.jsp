@@ -18,7 +18,7 @@
     <%= test.getMessage()%>
   </body>
 
-  <form action="/fedora_test" method="doPost">
+  <form action="${pageContext.request.contextPath}/test" method="post">
     <button type="submit" name="button" value="button1">Test API Connection</button>
   </form>
 </html>
