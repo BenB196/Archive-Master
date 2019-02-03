@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.archive_master.test" %>
-<%@ page import="com.archive_master.fedora_test" %>
 
 <html>
   <head>
@@ -20,5 +19,10 @@
 
   <form action="${pageContext.request.contextPath}/test" method="post">
     <button type="submit" name="button" value="button1">Test API Connection</button>
+  </form>
+
+  <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <input type="submit" />
   </form>
 </html>
