@@ -32,7 +32,7 @@ public class FedoraServlet extends HttpServlet {
 
 	private void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file) {
 		try {
-			URL url = new URL("http://localhost:8080/rest/"); //Set Base URL
+			URL url  = new URL("http://localhost:8080/rest/"); //Set Base URL
 
 			url = new URL(url, appendURL); //Append Base URL
 			try {
