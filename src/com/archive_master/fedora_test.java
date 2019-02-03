@@ -18,8 +18,6 @@ public class fedora_test extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String button = request.getParameter("button");
 
-
-
 		if ("button1".equals(button)) {
 			System.out.println("Creating URL");
 			URL url = new URL("http://localhost:8080/rest/");
