@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Upload class to handle methods used by UploadServlet
+ * Upload class to handle methods that need to work with Uploading
  *
  * @author benbr
  */

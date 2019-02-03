@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Fedora class to handle methods used by the FedoraServlet
+ * Fedora class to handle methods that need to talk with the Fedora API
  *
  * @author benbr
  */
