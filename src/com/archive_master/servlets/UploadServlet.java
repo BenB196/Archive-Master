@@ -1,4 +1,4 @@
-package com.archive_master;
+package com.archive_master.servlets;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 
 /**
+ * UploadServlet class to handle communication between jsp and java for File Uploads
+ *
  * @author benbr
  */
 
@@ -21,7 +21,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 @MultipartConfig
 public class UploadServlet extends HttpServlet {
 
-	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		//String description = request.getParameter("description") If you want people to upload a description with the image
 		try {
