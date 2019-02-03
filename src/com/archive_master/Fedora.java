@@ -18,11 +18,11 @@ public class Fedora {
 
 	/**
 	 * fedoraAPIHandler - handles actual interaction between java and the fedora API
-	 * @param appendURL
-	 * @param method
-	 * @param contentType
-	 * @param contentDisposition
-	 * @param file
+	 * @param appendURL - Addition part of API URL that needs to be added
+	 * @param method - API submit method GET, POST, PUT, PATCH, HEAD, OPTIONS, DELETE, MOVE, COPY
+	 * @param contentType - URL content-type value
+	 * @param contentDisposition - URL content-disposition value
+	 * @param file - file to be uploaded if uploading a file
 	 */
 	public static void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file) throws MalformedURLException, IOException {
 		URL url  = new URL("http://localhost:8080/rest/"); //Set Base URL
