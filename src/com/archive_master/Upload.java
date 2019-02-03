@@ -32,4 +32,32 @@ public class Upload {
 		return tempFile;
 	}
 
+	/**
+	 * fileExtension - gets the file extension based off of file name
+	 * @param fileName - fileName
+	 * @return - Returns extension
+	 */
+	public static String fileExtension (String fileName) {
+		int p = fileName.lastIndexOf(".");
+		String extension = fileName.substring(p + 1);
+		if (p == -1 || !extension.matches("\\w+")) {
+			return null;
+		} else {
+			return extension;
+		}
+	}
+
+	/**
+	 * fileNameOnly - gets the file name only, excluding the extension
+	 * @param fileName - fileName
+	 * @return - returns the fileName without and extension
+	 */
+	public static String fileNameOnly (String fileName) {
+		int p = fileName.lastIndexOf(".");
+		if (p == -1 ) {
+			return fileName;
+		} else {
+			return fileName.substring(0, p);
+		}
+	}
 }
