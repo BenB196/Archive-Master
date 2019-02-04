@@ -1,9 +1,9 @@
-package com.archive_master.servlets;
+package com.archivemaster.servlets;
 
-import com.archive_master.Upload;
+import com.archivemaster.Upload;
+
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,17 +17,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
-/**
- * UploadServlet class to handle communication between jsp and java for File Uploads
- *
- * @author benbr
- */
-
-@WebServlet("/upload")
-@MultipartConfig
+@WebServlet(name = "upload")
 public class UploadServlet extends HttpServlet {
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//String description = request.getParameter("description") If you want people to upload a description with the image
 		try {
 			final Part filePart = request.getPart("file");
@@ -38,7 +30,7 @@ public class UploadServlet extends HttpServlet {
 			final String SUFFIX = Upload.fileExtension(fileName);
 
 			if (SUFFIX == null || SUFFIX.isEmpty()
-				|| PREFIX == null || PREFIX.isEmpty()) {
+					|| PREFIX == null || PREFIX.isEmpty()) {
 				System.out.println("PREFIX/SUFFIX cannot be empty"); //TODO Return a real error message for this
 			} else {
 				File tempFile = Upload.stream2File(fileContent,PREFIX,SUFFIX);
@@ -62,5 +54,9 @@ public class UploadServlet extends HttpServlet {
 		} catch (ServletException ex) {
 			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 		}
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 	}
 }

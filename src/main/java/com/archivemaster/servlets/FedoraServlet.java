@@ -1,7 +1,9 @@
-package com.archive_master.servlets;
+package com.archivemaster.servlets;
 
-import com.archive_master.Fedora;
+import com.archivemaster.Fedora;
 
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,16 +11,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-/**
- * FedoraServlet class to handle communication between jsp and java for Fedora actions
- *
- * @author benbr
- */
-
-@WebServlet("/fedora")
+@WebServlet(name = "fedora")
+@MultipartConfig
 public class FedoraServlet extends HttpServlet {
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String submit = request.getParameter("submit");
 
 		if (submit.equalsIgnoreCase("getFedoraContainers")) { //Get Fedora Container DOES NOT WORK
@@ -38,5 +34,9 @@ public class FedoraServlet extends HttpServlet {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			}
 		}
+	}
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 	}
 }

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.archive_master.test" %>
+<%@ page import="com.archivemaster.test" %>
 
 <html>
 <head>
@@ -8,9 +8,10 @@
 <body>
 <h1>Below should say Hello World</h1>
 <%= test.getMessage()%>
-</body>
 
-<form action="${pageContext.request.contextPath}/test" method="post">
+<h2>${pageContext.request.contextPath}</h2>
+
+<form action="${request.contextPath}/test" method="post">
     <button type="submit" name="button" value="button1">Test API Connection</button>
 </form>
 
@@ -26,5 +27,6 @@
     <input type="file" name="file" />
     <input type="submit" />
 </form>
+</body>
 </html>
 

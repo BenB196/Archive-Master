@@ -1,4 +1,4 @@
-package com.archive_master;
+package com.archivemaster;
 
 import java.io.BufferedReader;
 import java.io.File;
