@@ -1,4 +1,4 @@
-package com.archive_master;
+package com.archivemaster;
 
 /**
  * This is an example class file
