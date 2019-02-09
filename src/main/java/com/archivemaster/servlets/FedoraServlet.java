@@ -14,6 +14,8 @@ import java.net.MalformedURLException;
 @WebServlet(name = "fedora")
 @MultipartConfig
 public class FedoraServlet extends HttpServlet {
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String submit = request.getParameter("submit");
 
@@ -36,7 +38,7 @@ public class FedoraServlet extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-	}
+	//protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	//
+	//}
 }

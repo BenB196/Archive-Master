@@ -19,6 +19,8 @@ import java.nio.file.attribute.BasicFileAttributes;
 
 @WebServlet(name = "upload")
 public class UploadServlet extends HttpServlet {
+
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//String description = request.getParameter("description") If you want people to upload a description with the image
 		try {
@@ -39,7 +41,6 @@ public class UploadServlet extends HttpServlet {
 				String path = tempFile.getAbsolutePath();
 				Path file = Paths.get(path);
 				BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
-				System.out.println("Creation Time: " + attr.creationTime());
 			}
 
 			//Basic File Metadata
@@ -56,7 +57,7 @@ public class UploadServlet extends HttpServlet {
 		}
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-	}
+	//protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	//
+	//}
 }

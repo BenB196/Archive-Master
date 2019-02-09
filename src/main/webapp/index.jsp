@@ -11,7 +11,7 @@
 
 <h2>${pageContext.request.contextPath}</h2>
 
-<form action="${request.contextPath}/test" method="post">
+<form action="${pageContext.request.contextPath}/test" method="post">
     <button type="submit" name="button" value="button1">Test API Connection</button>
 </form>
 
