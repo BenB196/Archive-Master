@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-@WebServlet(name = "fedora")
+@WebServlet("/fedora")
 @MultipartConfig
 public class FedoraServlet extends HttpServlet {
 
