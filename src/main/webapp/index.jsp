@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.archivemaster.test" %>
+<%@ page import="com.archivemaster.ControlledVocab" %>
 
 <html>
 <head>
@@ -8,12 +9,9 @@
 <body>
 <h1>Below should say Hello World</h1>
 <%= test.getMessage()%>
+<%= ControlledVocab.GetLanguageVocab()%>
 
 <h2>${pageContext.request.contextPath}</h2>
-
-<form action="${pageContext.request.contextPath}/test" method="post">
-    <button type="submit" name="button" value="button1">Test API Connection</button>
-</form>
 
 <form action="${pageContext.request.contextPath}/fedora" method="post">
     <input type="submit" name="submit" value="getFedoraContainers">
