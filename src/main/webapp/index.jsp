@@ -20,6 +20,7 @@
 </form>
 
 <form action="${pageContext.request.contextPath}/fedora" method="post">
+    <input type="text" name="collectionName">
     <input type="submit" name="submit" value="createFedoraNode">
 </form>
 

@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-@WebServlet(name = "fedora")
+@WebServlet("/fedora")
 @MultipartConfig
 public class FedoraServlet extends HttpServlet {
 
@@ -21,15 +21,16 @@ public class FedoraServlet extends HttpServlet {
 
 		if (submit.equalsIgnoreCase("getFedoraContainers")) { //Get Fedora Container DOES NOT WORK
 			try {
-				Fedora.fedoraAPIHandler("0a241fde-a4f8-4ab6-b19a-fe04c4531172", "GET",null,null, null);
+				Fedora.fedoraAPIHandler("", "GET",null,null, null);
 			} catch (MalformedURLException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			}
 		} else if (submit.equalsIgnoreCase("createFedoraNode")) {
+			String collectionName = request.getParameter("collectionName");
 			try {
-				Fedora.fedoraAPIHandler("", "POST", null, null, null);
+				Fedora.fedoraAPIHandler(collectionName, "PUT", null, null, null);
 			} catch (MalformedURLException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			} catch (IOException ex) {

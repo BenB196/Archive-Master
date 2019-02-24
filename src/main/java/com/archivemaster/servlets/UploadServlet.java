@@ -4,6 +4,7 @@ import com.archivemaster.Upload;
 
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,19 +18,20 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
-@WebServlet(name = "upload")
+@WebServlet("/upload")
+@MultipartConfig
 public class UploadServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//String description = request.getParameter("description") If you want people to upload a description with the image
 		try {
-			final Part filePart = request.getPart("file");
-			final String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-			final InputStream fileContent = filePart.getInputStream();
+			Part filePart = request.getPart("file");
+			String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+			InputStream fileContent = filePart.getInputStream();
 
-			final String PREFIX = Upload.fileNameOnly(fileName);
-			final String SUFFIX = Upload.fileExtension(fileName);
+			String PREFIX = Upload.fileNameOnly(fileName);
+			String SUFFIX = Upload.fileExtension(fileName);
 
 			if (SUFFIX == null || SUFFIX.isEmpty()
 					|| PREFIX == null || PREFIX.isEmpty()) {
@@ -41,6 +43,15 @@ public class UploadServlet extends HttpServlet {
 				String path = tempFile.getAbsolutePath();
 				Path file = Paths.get(path);
 				BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
+				System.out.println("File Creation Time: " + attr.creationTime());
+				System.out.println("File Key: " + attr.fileKey());
+				System.out.println("File is Directory: " + attr.isDirectory());
+				System.out.println("File Other: " + attr.isOther());
+				System.out.println("File Reg: " + attr.isRegularFile());
+				System.out.println("File Sym Link: " + attr.isSymbolicLink());
+				System.out.println("File Last Access: " + attr.lastAccessTime());
+				System.out.println("File Last Mod: " + attr.lastModifiedTime());
+				System.out.println("File Size: " + attr.size());
 			}
 
 			//Basic File Metadata
