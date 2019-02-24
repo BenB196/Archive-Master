@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,12 +30,20 @@ public class UploadServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//String description = request.getParameter("description") If you want people to upload a description with the image
 		try {
-			Part filePart = request.getPart("file");
-			String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-			InputStream fileContent = filePart.getInputStream();
+			final Part filePart = request.getPart("file");
+			final String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+			final InputStream fileContent = filePart.getInputStream();
 
-			String PREFIX = Upload.fileNameOnly(fileName);
-			String SUFFIX = Upload.fileExtension(fileName);
+			final String PREFIX = Upload.fileNameOnly(fileName);
+			final String SUFFIX = Upload.fileExtension(fileName);
+
+			//Basic File Metadata
+			System.out.println("Basic File InputStream Metadata");
+			System.out.println("Submitted File Name: " + filePart.getSubmittedFileName());
+			System.out.println("File Content Type: " + filePart.getContentType());
+			System.out.println("File Headers: " + filePart.getHeaderNames());
+			System.out.println("File Name: " + filePart.getName());
+			System.out.println("File Size(bytes): " + filePart.getSize());
 
 			if (SUFFIX == null || SUFFIX.isEmpty()
 					|| PREFIX == null || PREFIX.isEmpty()) {
@@ -56,8 +65,17 @@ public class UploadServlet extends HttpServlet {
 				System.out.println("File Last Mod: " + attr.lastModifiedTime());
 				System.out.println("File Size: " + attr.size());
 				try {
-					System.out.println("FIle SHA-1 hash: " + Upload.fileSHA1(tempFile, 1));
-					System.out.println("FIle SHA-256 hash: " + Upload.fileSHA1(tempFile, 256));
+					final String sha1 = Upload.fileSHA1(tempFile, 1).toLowerCase(); //Generate SHA 1 hash
+					final String sha256 = Upload.fileSHA1(tempFile, 256).toLowerCase(); //Generate SHA 256 hash
+					System.out.println("FIle SHA-1 hash: " + sha1);
+					System.out.println("FIle SHA-256 hash: " + sha256);
+					final String noSpaceName = fileName.replaceAll(" ", "_"); //Get Rid of spaces in fileName
+					System.out.println("Escaped File Name:" + noSpaceName);
+
+					final String containerName = "asdff"; //TODO Actually turn this into a variable
+
+					//Upload file to Fedora
+					Fedora.fedoraAPIHandler(containerName + "/" + noSpaceName, "PUT", filePart.getContentType(), "attachment; filename=\"" + fileName + "\"", tempFile, sha1, sha256);
 				} catch (NoSuchAlgorithmException ex) {
 					System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 				} catch (FileNotFoundException ex) {
@@ -65,18 +83,6 @@ public class UploadServlet extends HttpServlet {
 				} catch (IllegalArgumentException ex) {
 					System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 				}
-
-
-				//Basic File Metadata
-				System.out.println("Basic File InputStream Metadata");
-				System.out.println("Submitted File Name: " + filePart.getSubmittedFileName());
-				System.out.println("File Content Type: " + filePart.getContentType());
-				System.out.println("File Headers: " + filePart.getHeaderNames());
-				System.out.println("File Name: " + filePart.getName());
-				System.out.println("File Size(bytes): " + filePart.getSize());
-
-				//Upload file to Fedora
-				//Fedora.fedoraAPIHandler("", "POST", filePart.getContentType(), null, tempFile);
 			}
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.

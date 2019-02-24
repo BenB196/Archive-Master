@@ -1,9 +1,8 @@
 package com.archivemaster;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -23,13 +22,17 @@ public class Fedora {
 	 * @param contentType - URL content-type value
 	 * @param contentDisposition - URL content-disposition value
 	 * @param file - file to be uploaded if uploading a file
+	 * @param sha1 - sha1 hash
+	 * @param sha256 - sha256 hash
 	 */
-	public static void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file) throws MalformedURLException, IOException {
-		URL url  = new URL("http://localhost:8080/rest/"); //Set Base URL
+	public static void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file, String sha1, String sha256) throws MalformedURLException, IOException {
+		URL url = new URL("http://localhost:8080/rest/"); //Set Base URL
 
 		url = new URL(url, appendURL); //Append Base URL
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //Try to open new connection to Fedora
+
+		conn.setDoOutput(true);
 		conn.setRequestMethod(method); //Set request method
 
 		if (contentType != null && !contentType.isEmpty()) { //Set content-type if not null/empty
@@ -40,8 +43,17 @@ public class Fedora {
 			conn.setRequestProperty("Content-Disposition", contentDisposition);
 		}
 
-		if (file != null) {
+		if (sha1 != null && !sha1.isEmpty()) {  //Set digest if sha1 has been specified
+			conn.setRequestProperty("digest", "sha=" + sha1);
+		}
+		if (sha256 != null && !sha256.isEmpty()) { //Set digest if sha256 has been specified
+			conn.setRequestProperty("digest", "sha-256=" + sha256);
+		}
 
+		if (file != null) {
+			IOUtils.copy(new FileInputStream(file), conn.getOutputStream());
+			String res = IOUtils.toString(conn.getInputStream());
+			System.out.println("Upload file result" + res);
 		}
 
 		System.out.println("Response Code: " + conn.getResponseCode()); //Get Response code

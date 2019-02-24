@@ -21,7 +21,7 @@ public class FedoraServlet extends HttpServlet {
 
 		if (submit.equalsIgnoreCase("getFedoraContainers")) { //Get Fedora Container DOES NOT WORK
 			try {
-				Fedora.fedoraAPIHandler("", "GET",null,null, null);
+				Fedora.fedoraAPIHandler("", "GET",null,null, null, null, null);
 			} catch (MalformedURLException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			} catch (IOException ex) {
@@ -30,7 +30,7 @@ public class FedoraServlet extends HttpServlet {
 		} else if (submit.equalsIgnoreCase("createFedoraNode")) {
 			String collectionName = request.getParameter("collectionName"); //TODO Validate Collection Name
 			try {
-				Fedora.fedoraAPIHandler(collectionName, "PUT", null, null, null);
+				Fedora.fedoraAPIHandler(collectionName, "PUT", null, null, null, null, null);
 			} catch (MalformedURLException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			} catch (IOException ex) {
