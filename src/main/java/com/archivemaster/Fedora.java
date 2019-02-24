@@ -16,6 +16,19 @@ import java.net.URLEncoder;
 
 public class Fedora {
 
+	private static String BASEURL = "http://localhost:8080/rest/";
+
+	/**
+	 * generateURL - Generates the required URL by appending the base url with the appendURL variable
+	 * @param appendURL
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws MalformedURLException
+	 */
+	private static URL generateURL (String appendURL, String additionalAppend) throws UnsupportedEncodingException, MalformedURLException{
+		return (additionalAppend == null || additionalAppend.isEmpty()) ? new URL(BASEURL + URLEncoder.encode(appendURL, "UTF-8")) : new URL(BASEURL + URLEncoder.encode(appendURL, "UTF-8") + additionalAppend);
+	}
+
 	/**
 	 * fedoraAPIHandler - handles actual interaction between java and the fedora API
 	 * @param appendURL - Addition part of API URL that needs to be added
@@ -26,40 +39,38 @@ public class Fedora {
 	 * @param sha1 - sha1 hash
 	 * @param sha256 - sha256 hash
 	 */
-	public static void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file, String sha1, String sha256) throws MalformedURLException, IOException {
-		URL url = new URL("http://localhost:8080/rest/"); //Set Base URL
+	public static void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file, String sha1, String sha256) throws UnsupportedEncodingException, MalformedURLException, IOException {
+		URL url = generateURL(appendURL, null);
 
-		url = new URL(url, URLEncoder.encode(appendURL, "UTF-8")); //Append Base URL
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection(); //Open a new connection to Fedora
 
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //Try to open new connection to Fedora
-
-		conn.setDoOutput(true);
-		conn.setRequestMethod(method); //Set request method
+		connection.setDoOutput(true);
+		connection.setRequestMethod(method); //Set request method
 
 		if (contentType != null && !contentType.isEmpty()) { //Set content-type if not null/empty
-			conn.setRequestProperty("Content-Type", contentType);
+			connection.setRequestProperty("Content-Type", contentType);
 		}
 
 		if (contentDisposition != null && !contentDisposition.isEmpty()) { //Set content-dispositon if not null/empty
-			conn.setRequestProperty("Content-Disposition", contentDisposition);
+			connection.setRequestProperty("Content-Disposition", contentDisposition);
 		}
 
 		if (sha1 != null && !sha1.isEmpty()) {  //Set digest if sha1 has been specified
-			conn.setRequestProperty("digest", "sha=" + sha1);
+			connection.setRequestProperty("digest", "sha=" + sha1);
 		}
 		if (sha256 != null && !sha256.isEmpty()) { //Set digest if sha256 has been specified
-			conn.setRequestProperty("digest", "sha-256=" + sha256);
+			connection.setRequestProperty("digest", "sha-256=" + sha256);
 		}
 
 		if (file != null) {
-			IOUtils.copy(new FileInputStream(file), conn.getOutputStream());
-			String res = IOUtils.toString(conn.getInputStream());
+			IOUtils.copy(new FileInputStream(file), connection.getOutputStream());
+			String res = IOUtils.toString(connection.getInputStream());
 			System.out.println("Upload file result" + res);
 		}
 
-		System.out.println("Response Code: " + conn.getResponseCode()); //Get Response code
+		System.out.println("Response Code: " + connection.getResponseCode()); //Get Response code
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream())); //Create reader to read response context
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Create reader to read response context
 
 		StringBuffer result = new StringBuffer(); //Create string buffer
 		String line; //Init line var
@@ -68,6 +79,46 @@ public class Fedora {
 		}
 		System.out.println(result); //Print result
 		reader.close(); //Close reader
-		conn.disconnect(); //Close fedora connection
+		connection.disconnect(); //Close fedora connection
+	}
+
+	public static void fedoraAPIDelete (String deletePath) throws UnsupportedEncodingException, MalformedURLException, IOException {
+		URL url = generateURL(deletePath, null);
+
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection(); //Open a new connection to Fedora
+
+		connection.setRequestMethod("DELETE"); //DELETE specified Path
+
+		int responseCode = connection.getResponseCode(); //Get response code of the DELETE (204 is good)
+
+		System.out.println("Response Code of Delete Path: " + responseCode);
+
+		if (responseCode == 204) {
+			connection.disconnect(); //Close fedora connection
+
+			connection = (HttpURLConnection) url.openConnection(); //Open a new connection to Fedora
+
+			connection.setRequestMethod("GET"); //GET specified Path this is to double check that the content was deleted
+
+			responseCode = connection.getResponseCode(); //Get response code of the DELETE (410 is good)
+
+			System.out.println("Response Code of Get Tombstone: " + responseCode);
+
+			if (responseCode == 410) {
+				connection.disconnect(); //Close fedora connection
+
+				url = generateURL(deletePath, "/fcr:tombstone"); //Generate new URL to delete tombstone
+
+				connection = (HttpURLConnection) url.openConnection(); //Open a new connection to Fedora
+
+				connection.setRequestMethod("DELETE"); //DELETE specified Path tombstone
+
+				responseCode = connection.getResponseCode(); //Get response code of the DELETE (204 is good)
+
+				System.out.println("Response Code of Delete Tombstone: " + responseCode);
+
+				connection.disconnect(); //Close fedora connection
+			}
+		}
 	}
 }

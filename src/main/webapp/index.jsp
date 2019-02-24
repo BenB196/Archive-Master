@@ -28,6 +28,11 @@
     <input type="file" name="file" />
     <input type="submit" />
 </form>
+
+<form action="${pageContext.request.contextPath}/fedora" method="post">
+    <input type="text" name="deleteFile">
+    <input type="submit" name="submit" value="deleteFile">
+</form>
 </body>
 </html>
 

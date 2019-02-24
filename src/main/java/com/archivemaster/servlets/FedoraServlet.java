@@ -36,6 +36,15 @@ public class FedoraServlet extends HttpServlet {
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			}
+		} else if (submit.equalsIgnoreCase("deleteFile")) {
+			String file = request.getParameter("deleteFile");
+			try {
+				Fedora.fedoraAPIDelete(file);
+			} catch (MalformedURLException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			}
 		}
 	}
 
