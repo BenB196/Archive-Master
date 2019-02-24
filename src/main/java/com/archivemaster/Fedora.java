@@ -40,6 +40,10 @@ public class Fedora {
 			conn.setRequestProperty("Content-Disposition", contentDisposition);
 		}
 
+		if (file != null) {
+
+		}
+
 		System.out.println("Response Code: " + conn.getResponseCode()); //Get Response code
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream())); //Create reader to read response context

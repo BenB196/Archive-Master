@@ -1,5 +1,6 @@
 package com.archivemaster.servlets;
 
+import com.archivemaster.Fedora;
 import com.archivemaster.Upload;
 
 
@@ -11,12 +12,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.security.NoSuchAlgorithmException;
 
 @WebServlet("/upload")
 @MultipartConfig
@@ -37,7 +40,7 @@ public class UploadServlet extends HttpServlet {
 					|| PREFIX == null || PREFIX.isEmpty()) {
 				System.out.println("PREFIX/SUFFIX cannot be empty"); //TODO Return a real error message for this
 			} else {
-				File tempFile = Upload.stream2File(fileContent,PREFIX,SUFFIX);
+				File tempFile = Upload.stream2File(fileContent, PREFIX, SUFFIX);
 
 				System.out.println("File Metadata");
 				String path = tempFile.getAbsolutePath();
@@ -52,15 +55,29 @@ public class UploadServlet extends HttpServlet {
 				System.out.println("File Last Access: " + attr.lastAccessTime());
 				System.out.println("File Last Mod: " + attr.lastModifiedTime());
 				System.out.println("File Size: " + attr.size());
-			}
+				try {
+					System.out.println("FIle SHA-1 hash: " + Upload.fileSHA1(tempFile, 1));
+					System.out.println("FIle SHA-256 hash: " + Upload.fileSHA1(tempFile, 256));
+				} catch (NoSuchAlgorithmException ex) {
+					System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+				} catch (FileNotFoundException ex) {
+					System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+				} catch (IllegalArgumentException ex) {
+					System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+				}
 
-			//Basic File Metadata
-			System.out.println("Basic File InputStream Metadata");
-			System.out.println("Submitted File Name: " + filePart.getSubmittedFileName());
-			System.out.println("File Content Type: " + filePart.getContentType());
-			System.out.println("File Headers: " + filePart.getHeaderNames());
-			System.out.println("File Name: " + filePart.getName());
-			System.out.println("File Size(bytes): " + filePart.getSize());
+
+				//Basic File Metadata
+				System.out.println("Basic File InputStream Metadata");
+				System.out.println("Submitted File Name: " + filePart.getSubmittedFileName());
+				System.out.println("File Content Type: " + filePart.getContentType());
+				System.out.println("File Headers: " + filePart.getHeaderNames());
+				System.out.println("File Name: " + filePart.getName());
+				System.out.println("File Size(bytes): " + filePart.getSize());
+
+				//Upload file to Fedora
+				//Fedora.fedoraAPIHandler("", "POST", filePart.getContentType(), null, tempFile);
+			}
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 		} catch (ServletException ex) {
