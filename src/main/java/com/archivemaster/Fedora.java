@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 
 /**
  * Fedora class to handle methods that need to talk with the Fedora API
@@ -28,7 +29,7 @@ public class Fedora {
 	public static void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file, String sha1, String sha256) throws MalformedURLException, IOException {
 		URL url = new URL("http://localhost:8080/rest/"); //Set Base URL
 
-		url = new URL(url, appendURL); //Append Base URL
+		url = new URL(url, URLEncoder.encode(appendURL, "UTF-8")); //Append Base URL
 
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection(); //Try to open new connection to Fedora
 

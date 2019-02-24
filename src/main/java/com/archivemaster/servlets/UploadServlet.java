@@ -69,13 +69,11 @@ public class UploadServlet extends HttpServlet {
 					final String sha256 = Upload.fileSHA1(tempFile, 256).toLowerCase(); //Generate SHA 256 hash
 					System.out.println("FIle SHA-1 hash: " + sha1);
 					System.out.println("FIle SHA-256 hash: " + sha256);
-					final String noSpaceName = fileName.replaceAll(" ", "_"); //Get Rid of spaces in fileName
-					System.out.println("Escaped File Name:" + noSpaceName);
 
 					final String containerName = "asdff"; //TODO Actually turn this into a variable
 
 					//Upload file to Fedora
-					Fedora.fedoraAPIHandler(containerName + "/" + noSpaceName, "PUT", filePart.getContentType(), "attachment; filename=\"" + fileName + "\"", tempFile, sha1, sha256);
+					Fedora.fedoraAPIHandler(containerName + "/" + fileName, "PUT", filePart.getContentType(), "attachment; filename=\"" + fileName + "\"", tempFile, sha1, sha256);
 				} catch (NoSuchAlgorithmException ex) {
 					System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 				} catch (FileNotFoundException ex) {
