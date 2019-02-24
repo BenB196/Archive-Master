@@ -28,7 +28,7 @@ public class FedoraServlet extends HttpServlet {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			}
 		} else if (submit.equalsIgnoreCase("createFedoraNode")) {
-			String collectionName = request.getParameter("collectionName");
+			String collectionName = request.getParameter("collectionName"); //TODO Validate Collection Name
 			try {
 				Fedora.fedoraAPIHandler(collectionName, "PUT", null, null, null);
 			} catch (MalformedURLException ex) {
