@@ -9,7 +9,6 @@
 <body>
 <h1>Below should say Hello World</h1>
 <%= test.getMessage()%>
-<%= ControlledVocab.GetLanguageVocab()%>
 
 <h2>${pageContext.request.contextPath}</h2>
 
