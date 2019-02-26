@@ -1,0 +1,38 @@
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#">Side</a>
+    <a href="#">Menu</a>
+    <a href="#">Items</a>
+  </div>
+
+  <div id="main">
+    <span style="font-size:30px;cursor:pointer;color:#ff9900" onclick="openNav()">&#9776; Archive Master | Viewer</span>
+  </div>
+
+  <!-- <div class="container-fluid">
+    <h2>Results</h2>
+    <div class="form-group">
+      <label for="sel1">Select list:</label>
+      <select class="form-control" id="sel1">
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+      </select>
+    </div>
+
+    <input type="text" placeholder="Search.."/>
+    <button class ="yellow-button" text="Search"/>
+  </div> -->
+  <script>
+    function openNav() {
+      document.getElementById("mySidenav").style.width = "250px";
+      document.getElementById("main").style.marginLeft = "250px";
+    }
+
+    /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+    function closeNav() {
+      document.getElementById("mySidenav").style.width = "0";
+      document.getElementById("main").style.marginLeft = "0";
+    }
+  </script>
