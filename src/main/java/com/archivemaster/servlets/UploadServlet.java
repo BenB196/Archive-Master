@@ -70,8 +70,6 @@ public class UploadServlet extends HttpServlet {
 					System.out.println("FIle SHA-1 hash: " + sha1);
 					System.out.println("FIle SHA-256 hash: " + sha256);
 
-					//final String collectionName = "asdff"; //TODO Actually turn this into a variable
-
 					//Upload file to Fedora
 					Fedora.fedoraAPICreate("file", collectionName, fileName, filePart.getContentType(), "attachment; filename=\"" + fileName + "\"", tempFile, sha1, sha256);
 				} catch (NoSuchAlgorithmException ex) {
