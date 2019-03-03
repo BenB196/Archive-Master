@@ -2,10 +2,10 @@ package com.archivemaster;
 
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
+import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * Upload class to handle methods that need to work with Uploading
@@ -58,6 +58,33 @@ public class Upload {
 			return fileName;
 		} else {
 			return fileName.substring(0, p);
+		}
+	}
+
+	/**
+	 * fileSHA1 - generates sha 1 hash for a given file
+	 * @param file
+	 * @param shaHash - either 1 or 256
+	 * @return
+	 * @throws FileNotFoundException
+	 * @throws IOException
+	 * @throws NoSuchAlgorithmException
+	 */
+	public static String fileSHA1 (File file, int shaHash) throws FileNotFoundException, IOException, NoSuchAlgorithmException, IllegalArgumentException {
+		if (shaHash != 1 && shaHash != 256) {
+			throw new IllegalArgumentException("shaHash must either be 1 or 256");
+		}
+		MessageDigest sha1 = MessageDigest.getInstance("SHA-" + shaHash);
+		try (InputStream input = new FileInputStream(file)) {
+			byte[] buffer = new byte[8192];
+			int len = input.read(buffer);
+
+			while (len != -1) {
+				sha1.update(buffer, 0, len);
+				len = input.read(buffer);
+			}
+
+			return new HexBinaryAdapter().marshal(sha1.digest());
 		}
 	}
 }
