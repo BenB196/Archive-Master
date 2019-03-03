@@ -28,7 +28,7 @@ public class UploadServlet extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//String description = request.getParameter("description") If you want people to upload a description with the image
+		String collectionName = request.getParameter("collectionName");
 		try {
 			final Part filePart = request.getPart("file");
 			final String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
@@ -70,10 +70,8 @@ public class UploadServlet extends HttpServlet {
 					System.out.println("FIle SHA-1 hash: " + sha1);
 					System.out.println("FIle SHA-256 hash: " + sha256);
 
-					final String containerName = "asdff"; //TODO Actually turn this into a variable
-
 					//Upload file to Fedora
-					Fedora.fedoraAPIHandler(containerName + "/" + fileName, "PUT", filePart.getContentType(), "attachment; filename=\"" + fileName + "\"", tempFile, sha1, sha256);
+					Fedora.fedoraAPICreate("file", collectionName, fileName, filePart.getContentType(), "attachment; filename=\"" + fileName + "\"", tempFile, sha1, sha256);
 				} catch (NoSuchAlgorithmException ex) {
 					System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 				} catch (FileNotFoundException ex) {

@@ -7,6 +7,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Fedora class to handle methods that need to talk with the Fedora API
@@ -30,22 +34,57 @@ public class Fedora {
 	}
 
 	/**
-	 * fedoraAPIHandler - handles actual interaction between java and the fedora API
-	 * @param appendURL - Addition part of API URL that needs to be added
-	 * @param method - API submit method GET, POST, PUT, PATCH, HEAD, OPTIONS, DELETE, MOVE, COPY
-	 * @param contentType - URL content-type value
-	 * @param contentDisposition - URL content-disposition value
-	 * @param file - file to be uploaded if uploading a file
-	 * @param sha1 - sha1 hash
-	 * @param sha256 - sha256 hash
+	 * fedoraAPICreate - used to create collections and upload files
+	 * @param whatToCreate
+	 * @param collectionName
+	 * @param fileName
+	 * @param contentType
+	 * @param contentDisposition
+	 * @param file
+	 * @param sha1
+	 * @param sha256
+	 * @throws UnsupportedEncodingException
+	 * @throws MalformedURLException
+	 * @throws IllegalArgumentException
+	 * @throws IOException
 	 */
-	public static void fedoraAPIHandler (String appendURL, String method, String contentType, String contentDisposition, File file, String sha1, String sha256) throws UnsupportedEncodingException, MalformedURLException, IOException {
-		URL url = generateURL(appendURL, null);
+	public static void fedoraAPICreate (String whatToCreate, String collectionName, String fileName, String contentType, String contentDisposition, File file, String sha1, String sha256) throws UnsupportedEncodingException, MalformedURLException, IllegalArgumentException, IOException {
+		URL url = null;
+
+		if (collectionName == null || collectionName.isEmpty()) {
+			throw new IllegalArgumentException("Collection Name cannot be null");
+		} else if (collectionName.contains("/")) { //Check if collection name contains a /
+			throw new IllegalArgumentException("Collection Name cannot contain a /");
+		}
+
+		//TODO add metadata support
+		if (whatToCreate == null || whatToCreate.isEmpty() || whatToCreate.equalsIgnoreCase("collection")) {
+			ArrayList collections = fedoraAPIGetArray("collection", null);
+			if (collections.size() > 0 && collections.contains(collectionName)) {
+				throw new IllegalArgumentException("The specified collection already exists: " + collectionName); //Check if collection already exists
+			} else {
+				url = generateURL(collectionName, null);
+			}
+		} else if (whatToCreate.equalsIgnoreCase("file")) {
+			if (fileName == null || fileName.isEmpty()) {
+				throw new IllegalArgumentException("File Name cannot be null");
+			} else if (fileName.contains("/")) { //Check if file name contains a /
+				throw new IllegalArgumentException("File Name cannot contain a /");
+			} else {
+				ArrayList collections = fedoraAPIGetArray("collection", null);
+
+				if (collections.size() > 0 && !collections.contains(collectionName)) {
+					throw new IllegalArgumentException("The specified collection does not exist: " + collectionName); //Check if collection exists to put file in
+				} else {
+					url = generateURL(collectionName + "/", fileName);
+				}
+			}
+		}
 
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection(); //Open a new connection to Fedora
 
 		connection.setDoOutput(true);
-		connection.setRequestMethod(method); //Set request method
+		connection.setRequestMethod("PUT"); //Set request method
 
 		if (contentType != null && !contentType.isEmpty()) { //Set content-type if not null/empty
 			connection.setRequestProperty("Content-Type", contentType);
@@ -70,18 +109,97 @@ public class Fedora {
 
 		System.out.println("Response Code: " + connection.getResponseCode()); //Get Response code
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //Create reader to read response context
-
-		StringBuffer result = new StringBuffer(); //Create string buffer
-		String line; //Init line var
-		while ((line = reader.readLine()) != null) { //Loop through reader and append lines to result
-			result.append(line);
-		}
-		System.out.println(result); //Print result
-		reader.close(); //Close reader
 		connection.disconnect(); //Close fedora connection
 	}
 
+	public static int fedoraAPICheck () throws MalformedURLException, IOException {
+		URL url = generateURL("/", null);
+
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection(); //Open a new connection to Fedora
+		connection.setRequestMethod("GET"); //Set request method
+
+		connection.disconnect(); //Close fedora connection
+
+		return connection.getResponseCode();
+	}
+
+	/**
+	 * fedoraAPIGetArray - gets results of search and returns the results as an ArrayList
+	 * @param whatToGet - string; either collection or file
+	 * @param collectionName - string; if whatToGet equals file, a collection must be set
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	public static ArrayList fedoraAPIGetArray (String whatToGet, String collectionName) throws UnsupportedEncodingException, MalformedURLException, IOException, IllegalArgumentException {
+		URL url = null;
+
+		//TODO Validate that collectionName does not contain a /
+
+		if (whatToGet == null || whatToGet.isEmpty() || whatToGet.equalsIgnoreCase("collection")) { //Get collection array
+			url = generateURL("/", null);
+		} else if (whatToGet.equalsIgnoreCase("file")) {
+			if (collectionName == null || collectionName.isEmpty()) {
+				throw new IllegalArgumentException("Collection Not Specified"); //Get file array for specified collection
+			} else {
+				url = generateURL(collectionName, null);
+			}
+		} else {
+			throw new IllegalArgumentException("whatToGet must either equal collection or file");
+		}
+
+
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+		connection.setRequestMethod("GET");
+
+		ArrayList list = new ArrayList<String>();
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+		StringBuffer result = new StringBuffer();
+		String line;
+
+		Pattern p = Pattern.compile("<li><a href=\"" + BASEURL + ".+\">" + BASEURL + ".+</a></li>");
+		Matcher m = p.matcher("");
+
+		String pathRegex = Pattern.quote("<li><a href=\"")  + BASEURL + ".+\">" + BASEURL + "(.*?)" + Pattern.quote("</a></li>");
+		Pattern pathPattern = Pattern.compile(pathRegex);
+		while ((line = reader.readLine()) != null) {
+			if (m.reset(line.trim()).matches()) {
+				Matcher pathMatcher = pathPattern.matcher(line.trim());
+
+				while (pathMatcher.find()) {
+					String match = pathMatcher.group(1);
+					if (whatToGet.equalsIgnoreCase("file")) {
+						list.add(match.substring(match.lastIndexOf("/") + 1));
+					} else {
+						list.add(match);
+					}
+				}
+			}
+		}
+
+		reader.close(); //Close reader
+		connection.disconnect(); //Close fedora connection
+
+		if (list.size() == 0) {
+			return null;
+		} else {
+			Collections.sort(list);
+			return list;
+		}
+	}
+
+	/**
+	 * fedoraAPIDelete - Used for deleting things
+	 * @param deletePath
+	 * @throws UnsupportedEncodingException
+	 * @throws MalformedURLException
+	 * @throws IOException
+	 */
 	public static void fedoraAPIDelete (String deletePath) throws UnsupportedEncodingException, MalformedURLException, IOException {
 		URL url = generateURL(deletePath, null);
 
