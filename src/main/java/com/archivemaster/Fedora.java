@@ -173,7 +173,6 @@ public class Fedora {
 
 				while (pathMatcher.find()) {
 					String match = pathMatcher.group(1);
-					System.out.println(match);
 					if (whatToGet.equalsIgnoreCase("file")) {
 						list.add(match.substring(match.lastIndexOf("/") + 1));
 					} else {
