@@ -76,7 +76,12 @@ public class Fedora {
 				if (collections.size() > 0 && !collections.contains(collectionName)) {
 					throw new IllegalArgumentException("The specified collection does not exist: " + collectionName); //Check if collection exists to put file in
 				} else {
-					url = generateURL(collectionName + "/", fileName);
+					ArrayList files = fedoraAPIGetArray("file", collectionName); //Check if file already exists in the specified collecion
+					if (files.size() > 0 && files.contains(fileName)) {
+						throw new IllegalArgumentException("The specified file name already exists within the specified collection.");
+					} else {
+						url = generateURL(collectionName + "/", fileName);
+					}
 				}
 			}
 		}
