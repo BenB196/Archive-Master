@@ -1,20 +1,20 @@
 package com.archivemaster.fedora;
 
 import com.archivemaster.utils.HTTPAdditionalUtils;
+import com.archivemaster.validation.HttpAPIStatus;
 import com.archivemaster.validation.Validation;
 import org.apache.commons.io.IOUtils;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FedoraFile {
 	private static String NULL_F_NAME = "File Name cannot be NULL or Empty";
@@ -256,6 +256,7 @@ public class FedoraFile {
 
 	public static String getTitleFromFileName (String fileName) {
 		int p = fileName.lastIndexOf(".");
+		System.out.println(fileName.substring(0, p));
 		return (p == -1) ? fileName : fileName.substring(0, p);
 	}
 
@@ -299,8 +300,7 @@ public class FedoraFile {
 		return null; //TODO validate FedoraFile
 	}
 
-	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean createFedoraFile (FedoraFile file) {
+	public static HttpAPIStatus createFedoraFile (FedoraFile file) {
 		try {
 			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(file.getCollectionName(), "UTF-8") + "/" + URLEncoder.encode(file.getFileName(), "UTF-8"));
 
@@ -318,16 +318,44 @@ public class FedoraFile {
 
 				IOUtils.copy(new ByteArrayInputStream(file.getByteArray()), connection.getOutputStream());
 
-				boolean addFileResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+				HttpAPIStatus addFileStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
 
 				connection.disconnect();
 
 				//Check response of file add before continuing
-				if (addFileResponse) {
-
+				if (addFileStatus.isSuccess()) {
+					url = new URL(Fedora.RESTURL + URLEncoder.encode(file.getCollectionName(), StandardCharsets.UTF_8.name()) + "/" + URLEncoder.encode(file.getFileName(), StandardCharsets.UTF_8.name()) + Fedora.METADATAURL);
+					System.out.println(url.toString());
+					HttpAPIStatus addTitleStatus = Metadata.addMetadata("title", file.getTitle(), url);
+					if (!addTitleStatus.isSuccess()) return addTitleStatus;
+					HttpAPIStatus addCreatorStatus = Metadata.addMetadata("creator", file.getCreator(), url);
+					if (!addCreatorStatus.isSuccess()) return addCreatorStatus;
+					HttpAPIStatus addSubjectStatus = Metadata.addMetadata("subject", file.getSubject(), url);
+					if (!addSubjectStatus.isSuccess()) return addSubjectStatus;
+					HttpAPIStatus addDescriptionStatus = Metadata.addMetadata("description", file.getDescription(), url);
+					if (!addDescriptionStatus.isSuccess()) return addDescriptionStatus;
+					HttpAPIStatus addPublisherStatus = Metadata.addMetadata("publisher", file.getPublisher(), url);
+					if (!addPublisherStatus.isSuccess()) return addPublisherStatus;
+					HttpAPIStatus addContributorStatus = Metadata.addMetadata("contributor", file.getContributor(), url);
+					if (!addContributorStatus.isSuccess()) return addContributorStatus;
+					HttpAPIStatus addSDateStatus = Metadata.addMetadata("sDate", file.getsDate(), url);
+					if (!addSDateStatus.isSuccess()) return addSDateStatus;
+					HttpAPIStatus addTypeStatus = Metadata.addMetadata("type", file.getType(), url);
+					if (!addTypeStatus.isSuccess()) return addTypeStatus;
+					HttpAPIStatus addFormatStatus = Metadata.addMetadata("format", file.getFormat(), url);
+					if (!addFormatStatus.isSuccess()) return addFormatStatus;
+					HttpAPIStatus addIdentifier = Metadata.addMetadata("identifier", file.getIdentifier(), url);
+					if (!addIdentifier.isSuccess()) return addIdentifier;
+					HttpAPIStatus addSourceStatus = Metadata.addMetadata("source", file.getSource(), url);
+					if (!addSourceStatus.isSuccess()) return addSourceStatus;
+					HttpAPIStatus addLanguageStatus = Metadata.addMetadata("language", file.getLanguage(), url);
+					if (!addLanguageStatus.isSuccess()) return addLanguageStatus;
+					HttpAPIStatus addCoverageStatus = Metadata.addMetadata("coverage", file.getCoverage(), url);
+					if (!addCoverageStatus.isSuccess()) return addCoverageStatus;
+					HttpAPIStatus addRightsStatus = Metadata.addMetadata("rights", file.getRights(), url);
+					return addRightsStatus;
 				} else {
-					System.out.println(connection.getResponseMessage());
-					return false;
+					return addFileStatus;
 				}
 
 			} catch (IOException ex) {
@@ -340,11 +368,11 @@ public class FedoraFile {
 			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 		}
 
-		return false;
+		return null;
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean deleteFile (String collectionName, String fileName) {
+	public static HttpAPIStatus deleteFile (String collectionName, String fileName) {
 		try {
 			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, "UTF-8"));
 
@@ -354,31 +382,25 @@ public class FedoraFile {
 
 				connection.setRequestMethod("DELETE");
 
-				boolean deleteFileResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+				HttpAPIStatus deleteFileStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
 
 				connection.disconnect();
 
 				//Delete File tombstone
-				if (deleteFileResponse) {
+				if (deleteFileStatus.isSuccess()) {
 					url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, "UTF-8") + Fedora.TOMBSTONEURL);
 
 					connection = (HttpURLConnection) url.openConnection();
 
 					connection.setRequestMethod("DELETE");
 
-					boolean deleteFileTombstoneResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+					HttpAPIStatus deleteFileTomeStoneStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
 
 					connection.disconnect();
 
-					if (deleteFileTombstoneResponse) {
-						return true;
-					} else {
-						System.out.println(connection.getResponseMessage());
-						return false;
-					}
+					return deleteFileTomeStoneStatus;
 				} else {
-					System.out.println(connection.getResponseMessage());
-					return false;
+					return deleteFileStatus;
 				}
 
 			} catch (IOException ex) {
@@ -391,7 +413,7 @@ public class FedoraFile {
 			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 		}
 
-		return false;
+		return null;
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
@@ -399,11 +421,43 @@ public class FedoraFile {
 		return false; //TODO edit file
 	}
 
-	public static String getMetadataValue (String collectionName, String fileName, String metadataName) {
-		return null; //TODO this
-	}
-
 	public static ArrayList<FedoraFile> getFiles (String collectionName) {
-		return null; //TODO this
+		try {
+			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8"));
+
+			try {
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+				ArrayList<FedoraFile> files = new ArrayList<>();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String line;
+
+				Pattern p = Pattern.compile("<li><a href=\"" + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + ".+</a></li>");
+				Matcher m = p.matcher("");
+
+				String pathRegex = Pattern.quote("<li><a href=\"") + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + "/" + "(.*?)" + Pattern.quote("</a></li>");
+				System.out.println(pathRegex);
+				Pattern pathPattern = Pattern.compile(pathRegex);
+				while ((line = reader.readLine()) != null) {
+					String trimmedLine = line.trim();
+					if (m.reset(trimmedLine).matches()) {
+						Matcher pathMatcher = pathPattern.matcher(trimmedLine);
+						while (pathMatcher.find()) {
+							String fileName = URLDecoder.decode(pathMatcher.group(1), StandardCharsets.UTF_8.name());
+							System.out.println(fileName);
+							//TODO get metadata for file.
+						}
+					}
+				}
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			}
+
+		} catch (UnsupportedEncodingException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		} catch (MalformedURLException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		}
+		return null;
 	}
 }

@@ -40,6 +40,7 @@
     <input type="text" name="contributor"><br>
     <input type="text" name="sDate"><br>
     <input type="text" name="identifier"><br>
+    <input type="text" name="source"><br>
     <input type="text" name="language"><br>
     <input type="text" name="coverage"><br>
     <input type="text" name="rights"><br>

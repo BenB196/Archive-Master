@@ -3,6 +3,7 @@ package com.archivemaster.servlets;
 import com.archivemaster.Fedora;
 import com.archivemaster.fedora.Collection;
 import com.archivemaster.fedora.FedoraFile;
+import com.archivemaster.validation.HttpAPIStatus;
 import com.archivemaster.validation.Validation;
 import org.apache.commons.io.IOUtils;
 
@@ -16,9 +17,6 @@ import javax.servlet.http.Part;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static com.archivemaster.utils.ArchiveMasterUtils.isEmptyString;
 
@@ -39,8 +37,8 @@ public class FedoraServlet extends HttpServlet {
 			Validation validation = Collection.validateCollection(collection);
 
 			if (validation.isValid()) {
-				boolean addCollection = Collection.creationCollection((Collection) validation.getObject());
-				System.out.println(addCollection); //TODO Actually use response
+				HttpAPIStatus addCollection = Collection.creationCollection((Collection) validation.getObject());
+				System.out.println(addCollection.isSuccess()); //TODO Actually use response
 			} else {
 				System.out.println(validation.getResult());
 			}
@@ -50,8 +48,8 @@ public class FedoraServlet extends HttpServlet {
 			Validation validation = Collection.validateCollectionName(collectionName);
 
 			if (validation.isValid()) {
-				boolean deleteCollection = Collection.deleteCollection(collectionName);
-				System.out.println(deleteCollection); //TODO Actually use response
+				HttpAPIStatus deleteCollection = Collection.deleteCollection(collectionName);
+				System.out.println(deleteCollection.isSuccess()); //TODO Actually use response
 			} else {
 				System.out.println(validation.getResult());
 			}
@@ -81,17 +79,18 @@ public class FedoraServlet extends HttpServlet {
 			//}
 		} else if (submit.equalsIgnoreCase("Search Collection")) {
 			String collectionName = request.getParameter("collectionName");
-			try {
-				System.out.println(Fedora.fedoraAPIGetArray("file", collectionName));
-			} catch (UnsupportedEncodingException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (MalformedURLException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (IOException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (IllegalArgumentException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			}
+			System.out.println(FedoraFile.getFiles(collectionName));
+			//try {
+			//	System.out.println(Fedora.fedoraAPIGetArray("file", collectionName));
+			//} catch (UnsupportedEncodingException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//} catch (MalformedURLException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//} catch (IOException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//} catch (IllegalArgumentException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//}
 		} else if (submit.equalsIgnoreCase("Upload File")) {
 			final Part filePart = request.getPart("file");
 			final InputStream inputStream = filePart.getInputStream();
@@ -103,7 +102,7 @@ public class FedoraServlet extends HttpServlet {
 			final String description = request.getParameter("description");//TODO Description
 			final String publisher = request.getParameter("publisher");//TODO Publisher
 			final String contributor = request.getParameter("contributor");//TODO Contributor
-			final String sDate = request.getParameter("date");//TODO Date
+			final String sDate = request.getParameter("sDate");//TODO Date
 			final String type = FedoraFile.getFileTypeFromFileName(fileName);
 			final String format = filePart.getContentType();
 			final String identifier = request.getParameter("identifier");//TODO Identifier

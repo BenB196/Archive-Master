@@ -1,14 +1,13 @@
 package com.archivemaster.fedora;
 
 import com.archivemaster.utils.HTTPAdditionalUtils;
+import com.archivemaster.validation.HttpAPIStatus;
 import com.archivemaster.validation.Validation;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -98,8 +97,7 @@ public class Collection {
 		return new Validation(true, collection, null);
 	}
 
-	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean creationCollection (Collection collection) {
+	public static HttpAPIStatus creationCollection (Collection collection) {
 		try {
 			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collection.getName(), "UTF-8"));
 
@@ -110,16 +108,15 @@ public class Collection {
 				connection.setDoOutput(true);
 				connection.setRequestMethod("PUT");
 
-				boolean addCollectionResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+				HttpAPIStatus addCollectionStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
 
 				connection.disconnect();
 				//Check response of collection add before continuing
-				if (addCollectionResponse) {
+				if (addCollectionStatus.isSuccess()) {
 					//Add collection description
 					return Metadata.addMetadata("description", collection.getDescription(), url);
 				} else {
-					System.out.println(connection.getResponseMessage());
-					return false;
+					return addCollectionStatus;
 				}
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
@@ -131,11 +128,10 @@ public class Collection {
 			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 		}
 
-		return false;
+		return null;
 	}
 
-	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean deleteCollection (String collectionName) {
+	public static HttpAPIStatus deleteCollection (String collectionName) {
 		try {
 			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8"));
 
@@ -145,29 +141,23 @@ public class Collection {
 
 				connection.setRequestMethod("DELETE");
 
-				boolean deleteCollectionResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+				HttpAPIStatus deleteCollectionStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
 
 				connection.disconnect();
 				//Delete Collection tombstone
-				if (deleteCollectionResponse) {
+				if (deleteCollectionStatus.isSuccess()) {
 					url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + Fedora.TOMBSTONEURL);
 					connection = (HttpURLConnection) url.openConnection();
 
 					connection.setRequestMethod("DELETE");
 
-					boolean deleteCollectionTombStoneResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+					HttpAPIStatus deleteCollectionTombStoneStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
 
 					connection.disconnect();
 
-					if (deleteCollectionTombStoneResponse) {
-						return true;
-					} else {
-						System.out.println(connection.getResponseMessage());
-						return false;
-					}
+					return deleteCollectionTombStoneStatus;
 				} else {
-					System.out.println(connection.getResponseMessage());
-					return false;
+					return deleteCollectionStatus;
 				}
 
 			} catch (IOException ex) {
@@ -180,45 +170,12 @@ public class Collection {
 			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 		}
 
-		return false;
+		return null;
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
 	public static boolean editCollection (Collection currentCollection, Collection newCollection) {
 		return false; //TODO edit collection
-	}
-
-	public static String getCollectionDescription (String collectionName) {
-		try {
-			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8"));
-
-			try {
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				connection.setRequestMethod("GET");
-
-				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-				String line;
-
-				Pattern p = Pattern.compile(Metadata.metadataSearchStringBuilder("description"));
-				Matcher m = p.matcher("");
-				while ((line = reader.readLine()) != null) {
-					if (m.reset(line.trim()).matches()) {
-						return m.group(1);
-					}
-				}
-
-				reader.close();
-				connection.disconnect();
-			} catch (IOException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			}
-
-		} catch (UnsupportedEncodingException ex) {
-			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-		} catch (MalformedURLException ex) {
-			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-		}
-		return null;
 	}
 
 	public static ArrayList<Collection> getCollections () {
@@ -228,9 +185,7 @@ public class Collection {
 			try {
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				connection.setRequestMethod("GET");
-
-				ArrayList collections = new ArrayList<Collection>();
-
+				ArrayList<Collection> collections = new ArrayList<>();
 				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				String line;
 
@@ -244,8 +199,9 @@ public class Collection {
 					if (m.reset(line.trim()).matches()) {
 						Matcher pathMatcher = pathPattern.matcher(line.trim());
 						while (pathMatcher.find()) {
-							String collectionName = pathMatcher.group(1);
-							collections.add(new Collection(collectionName, getCollectionDescription(collectionName)));
+							String collectionName = URLDecoder.decode(pathMatcher.group(1), StandardCharsets.UTF_8.name());
+							String collectionDescription = Metadata.getMetadataValue(collectionName, null, "description");
+							collections.add(new Collection(collectionName, collectionDescription));
 						}
 					}
 				}
