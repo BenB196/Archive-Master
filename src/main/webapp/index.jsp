@@ -15,7 +15,13 @@
 
 <form action="${pageContext.request.contextPath}/fedora" method="post">
     <input type="text" name="collectionName">
+    <input type="text" name="collectionDescription">
     <input type="submit" name="submit" value="Create Collection">
+</form>
+
+<form action="${pageContext.request.contextPath}/fedora" method="post">
+    <input type="text" name="collectionName">
+    <input type="submit" name="submit" value="Delete Collection">
 </form>
 
 <form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
