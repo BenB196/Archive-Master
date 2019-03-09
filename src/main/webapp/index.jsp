@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.archivemaster.ControlledVocab" %>
-<%@ page import="com.archivemaster.Fedora" %>
+<%@ page import="com.archivemaster.fedora.Fedora" %>
 
 <html>
 <head>
@@ -9,7 +9,7 @@
 <body>
 
 <h1>Fedora API Status</h1>
-<%= Fedora.fedoraAPICheck() %>
+<%= Fedora.getFedoraAPIStatus() %>
 
 <h2>${pageContext.request.contextPath}</h2>
 
@@ -22,12 +22,6 @@
 <form action="${pageContext.request.contextPath}/fedora" method="post">
     <input type="text" name="collectionName">
     <input type="submit" name="submit" value="Delete Collection">
-</form>
-
-<form action="${pageContext.request.contextPath}/upload" method="post" enctype="multipart/form-data">
-    <input type="text" name="collectionName">
-    <input type="file" name="file" />
-    <input type="submit" value="Upload File" />
 </form>
 
 <form action="${pageContext.request.contextPath}/fedora" method="post" enctype="multipart/form-data">
@@ -51,11 +45,6 @@
     <input type="text" name="collectionName"><br>
     <input type="text" name="fileName"><br>
     <input type="submit" name="submit" value="Delete File">
-</form>
-
-<form action="${pageContext.request.contextPath}/fedora" method="post">
-    <input type="text" name="toDelete">
-    <input type="submit" name="submit" value="Delete">
 </form>
 
 <form action="${pageContext.request.contextPath}/fedora" method="post">

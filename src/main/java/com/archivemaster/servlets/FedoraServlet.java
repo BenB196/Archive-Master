@@ -1,6 +1,5 @@
 package com.archivemaster.servlets;
 
-import com.archivemaster.Fedora;
 import com.archivemaster.fedora.Collection;
 import com.archivemaster.fedora.FedoraFile;
 import com.archivemaster.validation.HttpAPIStatus;
@@ -17,8 +16,6 @@ import javax.servlet.http.Part;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.file.Paths;
-
-import static com.archivemaster.utils.ArchiveMasterUtils.isEmptyString;
 
 @WebServlet("/fedora")
 @MultipartConfig
@@ -53,44 +50,11 @@ public class FedoraServlet extends HttpServlet {
 			} else {
 				System.out.println(validation.getResult());
 			}
-		} else if (submit.equalsIgnoreCase("Delete")) {
-			String file = request.getParameter("toDelete");
-			try {
-				Fedora.fedoraAPIDelete(file);
-			} catch (MalformedURLException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (IOException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (IllegalArgumentException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			}
 		} else if (submit.equalsIgnoreCase("Search Collections")) {
-			//try {
-				//System.out.println(Fedora.fedoraAPIGetArray("collection", null));
-				Collection.getCollections();
-			//} catch (UnsupportedEncodingException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//} catch (MalformedURLException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//} catch (IOException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//} catch (IllegalArgumentException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//}
+			Collection.getCollections();
 		} else if (submit.equalsIgnoreCase("Search Collection")) {
 			String collectionName = request.getParameter("collectionName");
 			System.out.println(FedoraFile.getFiles(collectionName));
-			//try {
-			//	System.out.println(Fedora.fedoraAPIGetArray("file", collectionName));
-			//} catch (UnsupportedEncodingException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//} catch (MalformedURLException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//} catch (IOException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//} catch (IllegalArgumentException ex) {
-			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			//}
 		} else if (submit.equalsIgnoreCase("Upload File")) {
 			final Part filePart = request.getPart("file");
 			final InputStream inputStream = filePart.getInputStream();
