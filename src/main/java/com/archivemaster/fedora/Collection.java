@@ -4,12 +4,16 @@ import com.archivemaster.utils.HTTPAdditionalUtils;
 import com.archivemaster.validation.Validation;
 import org.apache.commons.io.IOUtils;
 
+import javax.crypto.Mac;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.archivemaster.utils.ArchiveMasterUtils.isEmptyString;
 
@@ -207,5 +211,81 @@ public class Collection {
 
 	public static boolean editCollection (Collection currentCollection, Collection newCollection) {
 		return false;
+	}
+
+	public static String getCollectionDescription (String collectionName) {
+		try {
+			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8"));
+
+			try {
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String line;
+
+				Pattern p = Pattern.compile(Metadata.metadataSearchStringBuilder("description"));
+				Matcher m = p.matcher("");
+				while ((line = reader.readLine()) != null) {
+					if (m.reset(line.trim()).matches()) {
+						return m.group(1);
+					}
+				}
+
+				reader.close();
+				connection.disconnect();
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			}
+
+		} catch (UnsupportedEncodingException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		} catch (MalformedURLException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		}
+		return null;
+	}
+
+	public static ArrayList<Collection> getCollections () {
+		try {
+			URL url = new URL(Fedora.RESTURL);
+
+			try {
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+
+				ArrayList collections = new ArrayList<Collection>();
+
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String line;
+
+				Pattern p = Pattern.compile("<li><a href=\"" + Fedora.RESTURL + ".+\">" + Fedora.RESTURL + ".+</a></li>");
+				Matcher m = p.matcher("");
+
+				String pathRegex = Pattern.quote("<li><a href=\"")  + Fedora.RESTURL + ".+\">" + Fedora.RESTURL + "(.*?)" + Pattern.quote("</a></li>");
+				Pattern pathPattern = Pattern.compile(pathRegex);
+
+				while ((line = reader.readLine()) != null) {
+					if (m.reset(line.trim()).matches()) {
+						Matcher pathMatcher = pathPattern.matcher(line.trim());
+						while (pathMatcher.find()) {
+							String collectionName = pathMatcher.group(1);
+							collections.add(new Collection(collectionName, getCollectionDescription(collectionName)));
+						}
+					}
+				}
+
+				reader.close();
+				connection.disconnect();
+
+				//System.out.println(connectionResponseMessage);
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			}
+
+		} catch (MalformedURLException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		}
+		return null;
 	}
 }

@@ -61,17 +61,18 @@ public class FedoraServlet extends HttpServlet {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			}
 		} else if (submit.equalsIgnoreCase("Search Collections")) {
-			try {
-				System.out.println(Fedora.fedoraAPIGetArray("collection", null));
-			} catch (UnsupportedEncodingException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (MalformedURLException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (IOException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			} catch (IllegalArgumentException ex) {
-				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
-			}
+			//try {
+				//System.out.println(Fedora.fedoraAPIGetArray("collection", null));
+				Collection.getCollections();
+			//} catch (UnsupportedEncodingException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//} catch (MalformedURLException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//} catch (IOException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//} catch (IllegalArgumentException ex) {
+			//	System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			//}
 		} else if (submit.equalsIgnoreCase("Search Collection")) {
 			String collectionName = request.getParameter("collectionName");
 			try {
