@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,13 +81,13 @@ public class Collection {
 	}
 
 	public static Validation validateCollection (Collection collection) {
-		Validation collectionNameValidation = validateCollectionName(collection.name);
+		Validation collectionNameValidation = validateCollectionName(collection.getName());
 
 		if (!collectionNameValidation.isValid()) {
 			return collectionNameValidation;
 		}
 
-		Validation collectionDescriptionValidation = validateCollectionDescription(collection.description);
+		Validation collectionDescriptionValidation = validateCollectionDescription(collection.getDescription());
 
 		if (!collectionDescriptionValidation.isValid()) {
 			return collectionDescriptionValidation;
@@ -102,7 +101,7 @@ public class Collection {
 	//TODO I do not like how this only returns a boolean, it should have a better response
 	public static boolean creationCollection (Collection collection) {
 		try {
-			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collection.name, "UTF-8"));
+			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collection.getName(), "UTF-8"));
 
 			//Create Collection
 			try {
@@ -117,31 +116,7 @@ public class Collection {
 				//Check response of collection add before continuing
 				if (addCollectionResponse) {
 					//Add collection description
-					//url = new URL(Fedora.RESTURL + URLEncoder.encode(collection.name, "UTF-8") + "/fcr:metadata");
-
-					HTTPAdditionalUtils.allowMethods("PATCH");
-
-					connection = (HttpURLConnection) url.openConnection();
-
-					connection.setDoOutput(true);
-					connection.setRequestMethod("PATCH");
-
-					connection.setRequestProperty("Content-Type", Metadata.META_DATA_CONTENT_TYPE);
-
-					String collectionDescriptionAPIString = Metadata.metadataAPIStringBuilder("description",collection.description, Metadata.INSERT);
-					InputStream is = new ByteArrayInputStream(collectionDescriptionAPIString.getBytes(StandardCharsets.UTF_8));
-					IOUtils.copy(is, connection.getOutputStream());
-
-					boolean addCollectionDescriptionResponse = Fedora.apiResponseCheck(connection.getResponseCode());
-
-					connection.disconnect();
-
-					if (addCollectionDescriptionResponse) {
-						return true;
-					} else {
-						System.out.println(connection.getResponseMessage());
-						return false;
-					}
+					return Metadata.addMetadata("description", collection.getDescription(), url);
 				} else {
 					System.out.println(connection.getResponseMessage());
 					return false;

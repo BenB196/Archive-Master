@@ -1,5 +1,6 @@
 package com.archivemaster.fedora;
 
+import com.archivemaster.utils.HTTPAdditionalUtils;
 import com.archivemaster.validation.Validation;
 import org.apache.commons.io.IOUtils;
 
@@ -9,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -298,7 +300,7 @@ public class FedoraFile {
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean createFedoraFile (FedoraFile file, byte[] byteArray) {
+	public static boolean createFedoraFile (FedoraFile file) {
 		try {
 			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(file.getCollectionName(), "UTF-8") + "/" + URLEncoder.encode(file.getFileName(), "UTF-8"));
 
@@ -309,23 +311,25 @@ public class FedoraFile {
 				connection.setDoOutput(true);
 				connection.setRequestMethod("PUT");
 
-				System.out.println(file.getFormat());
 				connection.setRequestProperty("Content-Type", file.getFormat());
-				System.out.println(file.getFileName());
 				connection.setRequestProperty("Content-Disposition", "attachment; filename=\"" + file.getFileName() + "\"");
-				System.out.println(file.getSha1());
 				connection.setRequestProperty("digest", "sha=" + file.getSha1());
-				System.out.println(file.getSha256());
-				//connection.setRequestProperty("digest", "sha-256=" + file.getSha256());
+				connection.setRequestProperty("digest", "sha-256=" + file.getSha256());
 
-				//InputStream inputStream = new ByteArrayInputStream(byteArray);
-				IOUtils.copy(new ByteArrayInputStream(byteArray), connection.getOutputStream());
-				String result = IOUtils.toString(connection.getInputStream());
-				System.out.println("Upload File Result: " + result);
+				IOUtils.copy(new ByteArrayInputStream(file.getByteArray()), connection.getOutputStream());
+
+				boolean addFileResponse = Fedora.apiResponseCheck(connection.getResponseCode());
 
 				connection.disconnect();
 
-				//TODO Handle add metadata
+				//Check response of file add before continuing
+				if (addFileResponse) {
+
+				} else {
+					System.out.println(connection.getResponseMessage());
+					return false;
+				}
+
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			}

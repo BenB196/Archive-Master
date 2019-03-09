@@ -111,13 +111,13 @@ public class FedoraServlet extends HttpServlet {
 			final String language = request.getParameter("language");//TODO Language
 			final String coverage = request.getParameter("coverage");//TODO Coverage
 			final String rights = request.getParameter("rights");//TODO Rights
-			final String sha1 = FedoraFile.generateSHAHash(new ByteArrayInputStream(byteArray), 1);
-			final String sha256 = FedoraFile.generateSHAHash(new ByteArrayInputStream(byteArray), 256);
+			final String sha1 = FedoraFile.generateSHAHash(new ByteArrayInputStream(byteArray), 1).toLowerCase();
+			final String sha256 = FedoraFile.generateSHAHash(new ByteArrayInputStream(byteArray), 256).toLowerCase();
 			final String collectionName = request.getParameter("collectionName");//TODO Rights
 
 			FedoraFile file = new FedoraFile(byteArray, fileName, title, creator, subject, description, publisher, contributor, sDate, type, format, identifier, source, language, coverage, rights, sha1, sha256, collectionName);
 
-			FedoraFile.createFedoraFile(file, byteArray);
+			FedoraFile.createFedoraFile(file);
 		} else if (submit.equalsIgnoreCase("Delete File")) {
 			final String collectionName = request.getParameter("collectionName");
 			final String fileName = request.getParameter("fileName");
