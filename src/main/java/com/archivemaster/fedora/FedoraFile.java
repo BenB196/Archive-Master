@@ -1,14 +1,17 @@
 package com.archivemaster.fedora;
 
 import com.archivemaster.validation.Validation;
+import org.apache.commons.io.IOUtils;
 
 import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class FedoraFile {
@@ -18,7 +21,7 @@ public class FedoraFile {
 
 	private static String DIR_SELECTED = "File must be a file, not a directory";
 
-	private InputStream inputStream;
+	private byte[] byteArray;
 
 	private String 	fileName,
 					title,
@@ -45,8 +48,8 @@ public class FedoraFile {
 
 	}
 
-	public FedoraFile (InputStream inputStream, String fileName, String title, String creator, String subject, String description, String publisher, String contributor, Date date, String type, String format, String identifier, String source, String language, String coverage, String rights, String sha1, String sha256, String collectionName) {
-		this.inputStream = inputStream;
+	public FedoraFile (byte[] byteArray, String fileName, String title, String creator, String subject, String description, String publisher, String contributor, Date date, String type, String format, String identifier, String source, String language, String coverage, String rights, String sha1, String sha256, String collectionName) {
+		this.byteArray = byteArray;
 		this.fileName = fileName;
 		this.title = title;
 		this.creator = creator;
@@ -67,8 +70,8 @@ public class FedoraFile {
 		this.collectionName = collectionName;
 	}
 
-	public FedoraFile (InputStream inputStream, String fileName, String title, String creator, String subject, String description, String publisher, String contributor, String sDate, String type, String format, String identifier, String source, String language, String coverage, String rights, String sha1, String sha256, String collectionName) {
-		this.inputStream = inputStream;
+	public FedoraFile (byte[] byteArray, String fileName, String title, String creator, String subject, String description, String publisher, String contributor, String sDate, String type, String format, String identifier, String source, String language, String coverage, String rights, String sha1, String sha256, String collectionName) {
+		this.byteArray = byteArray;
 		this.fileName = fileName;
 		this.title = title;
 		this.creator = creator;
@@ -89,12 +92,12 @@ public class FedoraFile {
 		this.collectionName = collectionName;
 	}
 
-	public InputStream getInputStream() {
-		return inputStream;
+	public byte[] getByteArray() {
+		return byteArray;
 	}
 
-	public void setInputStream(InputStream inputStream) {
-		this.inputStream = inputStream;
+	public void setByteArray(byte[] byteArray) {
+		this.byteArray = byteArray;
 	}
 
 	public String getFileName() {
@@ -295,13 +298,96 @@ public class FedoraFile {
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean createFedoraFile (FedoraFile file) {
-		return false; //TODO create file
+	public static boolean createFedoraFile (FedoraFile file, byte[] byteArray) {
+		try {
+			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(file.getCollectionName(), "UTF-8") + "/" + URLEncoder.encode(file.getFileName(), "UTF-8"));
+
+			//Create file
+			try {
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+				connection.setDoOutput(true);
+				connection.setRequestMethod("PUT");
+
+				System.out.println(file.getFormat());
+				connection.setRequestProperty("Content-Type", file.getFormat());
+				System.out.println(file.getFileName());
+				connection.setRequestProperty("Content-Disposition", "attachment; filename=\"" + file.getFileName() + "\"");
+				System.out.println(file.getSha1());
+				connection.setRequestProperty("digest", "sha=" + file.getSha1());
+				System.out.println(file.getSha256());
+				//connection.setRequestProperty("digest", "sha-256=" + file.getSha256());
+
+				//InputStream inputStream = new ByteArrayInputStream(byteArray);
+				IOUtils.copy(new ByteArrayInputStream(byteArray), connection.getOutputStream());
+				String result = IOUtils.toString(connection.getInputStream());
+				System.out.println("Upload File Result: " + result);
+
+				connection.disconnect();
+
+				//TODO Handle add metadata
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			}
+
+		} catch (UnsupportedEncodingException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		} catch (MalformedURLException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		}
+
+		return false;
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean deleteFile (String fileName) {
-		return false; //TODO delete file
+	public static boolean deleteFile (String collectionName, String fileName) {
+		try {
+			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, "UTF-8"));
+
+			//Delete File
+			try {
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+				connection.setRequestMethod("DELETE");
+
+				boolean deleteFileResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+
+				connection.disconnect();
+
+				//Delete File tombstone
+				if (deleteFileResponse) {
+					url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, "UTF-8") + Fedora.TOMBSTONEURL);
+
+					connection = (HttpURLConnection) url.openConnection();
+
+					connection.setRequestMethod("DELETE");
+
+					boolean deleteFileTombstoneResponse = Fedora.apiResponseCheck(connection.getResponseCode());
+
+					connection.disconnect();
+
+					if (deleteFileTombstoneResponse) {
+						return true;
+					} else {
+						System.out.println(connection.getResponseMessage());
+						return false;
+					}
+				} else {
+					System.out.println(connection.getResponseMessage());
+					return false;
+				}
+
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			}
+
+		} catch (UnsupportedEncodingException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		} catch (MalformedURLException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		}
+
+		return false;
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
@@ -309,5 +395,11 @@ public class FedoraFile {
 		return false; //TODO edit file
 	}
 
-	public static
+	public static String getMetadataValue (String collectionName, String fileName, String metadataName) {
+		return null; //TODO this
+	}
+
+	public static ArrayList<FedoraFile> getFiles (String collectionName) {
+		return null; //TODO this
+	}
 }

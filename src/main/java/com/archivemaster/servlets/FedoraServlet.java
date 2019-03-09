@@ -4,6 +4,7 @@ import com.archivemaster.Fedora;
 import com.archivemaster.fedora.Collection;
 import com.archivemaster.fedora.FedoraFile;
 import com.archivemaster.validation.Validation;
+import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -94,6 +95,7 @@ public class FedoraServlet extends HttpServlet {
 		} else if (submit.equalsIgnoreCase("Upload File")) {
 			final Part filePart = request.getPart("file");
 			final InputStream inputStream = filePart.getInputStream();
+			byte[] byteArray = IOUtils.toByteArray(inputStream); //Need to store input stream for multiple uses
 			final String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
 			final String title = FedoraFile.getTitleFromFileName(fileName);
 			final String creator = request.getParameter("creator");//TODO Creator
@@ -106,14 +108,23 @@ public class FedoraServlet extends HttpServlet {
 			final String format = filePart.getContentType();
 			final String identifier = request.getParameter("identifier");//TODO Identifier
 			final String source = request.getParameter("source");//TODO source
-			final String lanuage = request.getParameter("lanuage");//TODO Language
+			final String language = request.getParameter("language");//TODO Language
 			final String coverage = request.getParameter("coverage");//TODO Coverage
 			final String rights = request.getParameter("rights");//TODO Rights
-			final String sha1 = FedoraFile.generateSHAHash(inputStream, 1);
-			final String sha256 = FedoraFile.generateSHAHash(inputStream, 256);
+			final String sha1 = FedoraFile.generateSHAHash(new ByteArrayInputStream(byteArray), 1);
+			final String sha256 = FedoraFile.generateSHAHash(new ByteArrayInputStream(byteArray), 256);
 			final String collectionName = request.getParameter("collectionName");//TODO Rights
 
-			FedoraFile file = new FedoraFile(inputStream, fileName, title, creator, subject, description, publisher, contributor, sDate, type, format, identifier, source, lanuage, coverage, rights, sha1, sha256, collectionName);
+			FedoraFile file = new FedoraFile(byteArray, fileName, title, creator, subject, description, publisher, contributor, sDate, type, format, identifier, source, language, coverage, rights, sha1, sha256, collectionName);
+
+			FedoraFile.createFedoraFile(file, byteArray);
+		} else if (submit.equalsIgnoreCase("Delete File")) {
+			final String collectionName = request.getParameter("collectionName");
+			final String fileName = request.getParameter("fileName");
+
+			//TODO validate collection and file name
+
+			FedoraFile.deleteFile(collectionName, fileName);
 		}
 	}
 

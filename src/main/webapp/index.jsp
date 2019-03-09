@@ -30,6 +30,28 @@
     <input type="submit" value="Upload File" />
 </form>
 
+<form action="${pageContext.request.contextPath}/fedora" method="post" enctype="multipart/form-data">
+    <input type="text" name="collectionName"><br>
+    <input type="file" name="file" /><br>
+    <input type="text" name="creator"><br>
+    <input type="text" name="subject"><br>
+    <input type="text" name="description"><br>
+    <input type="text" name="publisher"><br>
+    <input type="text" name="contributor"><br>
+    <input type="text" name="sDate"><br>
+    <input type="text" name="identifier"><br>
+    <input type="text" name="language"><br>
+    <input type="text" name="coverage"><br>
+    <input type="text" name="rights"><br>
+    <input type="submit" name="submit" value="Upload File" />
+</form>
+
+<form action="${pageContext.request.contextPath}/fedora" method="post">
+    <input type="text" name="collectionName"><br>
+    <input type="text" name="fileName"><br>
+    <input type="submit" name="submit" value="Delete File">
+</form>
+
 <form action="${pageContext.request.contextPath}/fedora" method="post">
     <input type="text" name="toDelete">
     <input type="submit" name="submit" value="Delete">
