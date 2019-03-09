@@ -67,9 +67,9 @@ public class Fedora {
 			}
 		} else if (whatToCreate.equalsIgnoreCase("file")) {
 			if (fileName == null || fileName.isEmpty()) {
-				throw new IllegalArgumentException("File Name cannot be null");
+				throw new IllegalArgumentException("FedoraFile Name cannot be null");
 			} else if (fileName.contains("/")) { //Check if file name contains a /
-				throw new IllegalArgumentException("File Name cannot contain a /");
+				throw new IllegalArgumentException("FedoraFile Name cannot contain a /");
 			} else {
 				ArrayList collections = fedoraAPIGetArray("collection", null);
 

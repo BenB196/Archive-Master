@@ -37,13 +37,13 @@ public class UploadServlet extends HttpServlet {
 			final String PREFIX = Upload.fileNameOnly(fileName);
 			final String SUFFIX = Upload.fileExtension(fileName);
 
-			//Basic File Metadata
-			System.out.println("Basic File InputStream Metadata");
-			System.out.println("Submitted File Name: " + filePart.getSubmittedFileName());
-			System.out.println("File Content Type: " + filePart.getContentType());
-			System.out.println("File Headers: " + filePart.getHeaderNames());
-			System.out.println("File Name: " + filePart.getName());
-			System.out.println("File Size(bytes): " + filePart.getSize());
+			//Basic FedoraFile Metadata
+			System.out.println("Basic FedoraFile InputStream Metadata");
+			System.out.println("Submitted FedoraFile Name: " + filePart.getSubmittedFileName());
+			System.out.println("FedoraFile Content Type: " + filePart.getContentType());
+			System.out.println("FedoraFile Headers: " + filePart.getHeaderNames());
+			System.out.println("FedoraFile Name: " + filePart.getName());
+			System.out.println("FedoraFile Size(bytes): " + filePart.getSize());
 
 			if (SUFFIX == null || SUFFIX.isEmpty()
 					|| PREFIX == null || PREFIX.isEmpty()) {
@@ -51,19 +51,19 @@ public class UploadServlet extends HttpServlet {
 			} else {
 				File tempFile = Upload.stream2File(fileContent, PREFIX, SUFFIX);
 
-				System.out.println("File Metadata");
+				System.out.println("FedoraFile Metadata");
 				String path = tempFile.getAbsolutePath();
 				Path file = Paths.get(path);
 				BasicFileAttributes attr = Files.readAttributes(file, BasicFileAttributes.class);
-				System.out.println("File Creation Time: " + attr.creationTime());
-				System.out.println("File Key: " + attr.fileKey());
-				System.out.println("File is Directory: " + attr.isDirectory());
-				System.out.println("File Other: " + attr.isOther());
-				System.out.println("File Reg: " + attr.isRegularFile());
-				System.out.println("File Sym Link: " + attr.isSymbolicLink());
-				System.out.println("File Last Access: " + attr.lastAccessTime());
-				System.out.println("File Last Mod: " + attr.lastModifiedTime());
-				System.out.println("File Size: " + attr.size());
+				System.out.println("FedoraFile Creation Time: " + attr.creationTime());
+				System.out.println("FedoraFile Key: " + attr.fileKey());
+				System.out.println("FedoraFile is Directory: " + attr.isDirectory());
+				System.out.println("FedoraFile Other: " + attr.isOther());
+				System.out.println("FedoraFile Reg: " + attr.isRegularFile());
+				System.out.println("FedoraFile Sym Link: " + attr.isSymbolicLink());
+				System.out.println("FedoraFile Last Access: " + attr.lastAccessTime());
+				System.out.println("FedoraFile Last Mod: " + attr.lastModifiedTime());
+				System.out.println("FedoraFile Size: " + attr.size());
 				try {
 					final String sha1 = Upload.fileSHA1(tempFile, 1).toLowerCase(); //Generate SHA 1 hash
 					final String sha256 = Upload.fileSHA1(tempFile, 256).toLowerCase(); //Generate SHA 256 hash

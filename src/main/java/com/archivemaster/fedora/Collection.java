@@ -4,7 +4,6 @@ import com.archivemaster.utils.HTTPAdditionalUtils;
 import com.archivemaster.validation.Validation;
 import org.apache.commons.io.IOUtils;
 
-import javax.crypto.Mac;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -209,8 +208,9 @@ public class Collection {
 		return false;
 	}
 
+	//TODO I do not like how this only returns a boolean, it should have a better response
 	public static boolean editCollection (Collection currentCollection, Collection newCollection) {
-		return false;
+		return false; //TODO edit collection
 	}
 
 	public static String getCollectionDescription (String collectionName) {

@@ -18,8 +18,8 @@ public class Upload {
 	/**
 	 * stream2File - ccnverts an InputStream to a temp file
 	 * @param inputStream - An InputStream of a file
-	 * @param PREFIX - File Name
-	 * @param SUFFIX - File extension
+	 * @param PREFIX - FedoraFile Name
+	 * @param SUFFIX - FedoraFile extension
 	 * @return - returns temp file
 	 * @throws IOException - Throws IO Exception
 	 */
