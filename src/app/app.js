@@ -5,7 +5,7 @@ var ArchiveMaster = angular.module('ArchiveMaster', [
 ArchiveMaster.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider
-  .when('/home', {
+  .when('/', {
     templateUrl: 'views/home.html'
   })
   .when('/admin-dashboard', {
@@ -17,10 +17,19 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
   .when('/dashboard', {
     templateUrl: 'views/dashboard.html'
   })
+  .when('/manage-collections', {
+    templateUrl : 'views/manageCollections.html'
+  })
+  .when('/add-collection', {
+    templateUrl : 'views/addCollection.html'
+  })
+  .when('/add-record', {
+    templateUrl : 'views/addRecord.html'
+  })
   .when('/search', {
     templateUrl: 'views/search.html'
   }).otherwise({
-    redirectTo: '/home'
+    redirectTo: '/'
   });
 
 }]);
