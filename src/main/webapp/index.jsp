@@ -1,60 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.archivemaster.ControlledVocab" %>
-<%@ page import="com.archivemaster.fedora.Fedora" %>
-
-<html>
+<!DOCTYPE html>
+<html lang="en" ng-app="ArchiveMaster">
 <head>
-    <title>$Title$</title>
+    <title>ArchiveMaster</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="lib/angular.min.js"></script>
+    <script src="lib/angular-route.min.js"></script>
+    <script src="app.js"></script>
 </head>
-<body>
 
-<h1>Fedora API Status</h1>
-<%= Fedora.getFedoraAPIStatus() %>
-
-<h2>${pageContext.request.contextPath}</h2>
-
-<form action="${pageContext.request.contextPath}/fedora" method="post">
-    <input type="text" name="collectionName">
-    <input type="text" name="collectionDescription">
-    <input type="submit" name="submit" value="Create Collection">
-</form>
-
-<form action="${pageContext.request.contextPath}/fedora" method="post">
-    <input type="text" name="collectionName">
-    <input type="submit" name="submit" value="Delete Collection">
-</form>
-
-<form action="${pageContext.request.contextPath}/fedora" method="post" enctype="multipart/form-data">
-    <input type="text" name="collectionName"><br>
-    <input type="file" name="file" /><br>
-    <input type="text" name="creator"><br>
-    <input type="text" name="subject"><br>
-    <input type="text" name="description"><br>
-    <input type="text" name="publisher"><br>
-    <input type="text" name="contributor"><br>
-    <input type="text" name="sDate"><br>
-    <input type="text" name="identifier"><br>
-    <input type="text" name="source"><br>
-    <input type="text" name="language"><br>
-    <input type="text" name="coverage"><br>
-    <input type="text" name="rights"><br>
-    <input type="submit" name="submit" value="Upload File" />
-</form>
-
-<form action="${pageContext.request.contextPath}/fedora" method="post">
-    <input type="text" name="collectionName"><br>
-    <input type="text" name="fileName"><br>
-    <input type="submit" name="submit" value="Delete File">
-</form>
-
-<form action="${pageContext.request.contextPath}/fedora" method="post">
-    <input type="submit" name="submit" value="Search Collections">
-</form>
-
-<form action="${pageContext.request.contextPath}/fedora" method="post">
-    <input type="text" name="collectionName">
-    <input type="submit" name="submit" value="Search Collection">
-</form>
+<body class="body">
+    <header ng-include="'header.html'"></header>
+    <main ng-view></main>
 </body>
+
 </html>
 
