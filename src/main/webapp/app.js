@@ -24,7 +24,7 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
     templateUrl : './views/addCollection.jsp'
   })
   .when('/add-record', {
-    templateUrl : './views/addRecord.html'
+    templateUrl : './views/addRecord.jsp'
   })
   .when('/search', {
     templateUrl: './views/search.html'
