@@ -18,7 +18,7 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
     templateUrl: 'views/dashboard.html'
   })
   .when('/manage-collections', {
-    templateUrl : './views/manageCollections.html'
+    templateUrl : './views/manageCollections.jsp'
   })
   .when('/add-collection', {
     templateUrl : './views/addCollection.jsp'

@@ -1,3 +1,5 @@
+<%@ page import="com.archivemaster.fedora.Collection" %>
+<%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core" %>
 <h2 class="text-primary display-4">Manage Your Archive</h2>
 <div class="flex-container">
   <a  href="./#!/add-collection"><button class="button-orange button-hover">Add</button></a>
@@ -8,28 +10,18 @@
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr class="table-primary">
-        <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Description</th>
       </tr>
     </thead>
     <!-- TODO: Delete test rows -->
     <tbody>
+    <c:forEach items="<%=Collection.getCollections()%>" var="collection">
       <tr>
-        <th scope="row">1</th>
-        <td>Collection 1</td>
-        <td>First Collection</td>
+        <td>${collection.name}</td>
+        <td>${collection.description}</td>
       </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Collection 2</td>
-        <td>Second Collection</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Collection 3</td>
-        <td>Third Collection</td>
-      </tr>
+    </c:forEach>
     </tbody>
   </table>
 </div>

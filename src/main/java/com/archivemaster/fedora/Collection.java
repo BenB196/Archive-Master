@@ -9,6 +9,8 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -209,6 +211,7 @@ public class Collection {
 				reader.close();
 				connection.disconnect();
 
+				Collections.sort(collections, compareByCollectionName);
 				return collections;
 
 				//System.out.println(connectionResponseMessage);
@@ -221,4 +224,11 @@ public class Collection {
 		}
 		return null;
 	}
+
+	private static Comparator<Collection> compareByCollectionName = new Comparator<Collection>() {
+		@Override
+		public int compare(Collection o1, Collection o2) {
+			return o1.getName().compareTo(o2.getName());
+		}
+	};
 }
