@@ -209,6 +209,8 @@ public class Collection {
 				reader.close();
 				connection.disconnect();
 
+				return collections;
+
 				//System.out.println(connectionResponseMessage);
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
