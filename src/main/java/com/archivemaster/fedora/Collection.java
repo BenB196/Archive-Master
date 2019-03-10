@@ -225,6 +225,12 @@ public class Collection {
 		return null;
 	}
 
+	public static Collection getCollectionByName (String collectionName) {
+		String description = Metadata.getMetadataValue(collectionName, null, "description");
+
+		return new Collection(collectionName, description);
+	}
+
 	private static Comparator<Collection> compareByCollectionName = new Comparator<Collection>() {
 		@Override
 		public int compare(Collection o1, Collection o2) {

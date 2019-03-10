@@ -12,6 +12,10 @@
     </div>
     -->
     <div class="form-group">
+      <label for="collectionName">Collection Name</label>
+      <input type="text" class="form-control" id="collectionName" readonly>
+    </div>
+    <div class="form-group">
       <label for="creator">Creator</label>
       <input type="text" class="form-control" id="creator">
     </div>
