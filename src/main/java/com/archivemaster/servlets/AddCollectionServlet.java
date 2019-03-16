@@ -4,6 +4,7 @@ import com.archivemaster.fedora.Collection;
 import com.archivemaster.validation.HttpAPIStatus;
 import com.archivemaster.validation.Validation;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -25,8 +26,10 @@ public class AddCollectionServlet extends HttpServlet {
 		Validation validation = Collection.validateCollection(collection);
 
 		if (validation.isValid()) {
-			HttpAPIStatus addCollection = Collection.creationCollection((Collection) validation.getObject());
-			System.out.println(addCollection.isSuccess()); //TODO this is where you should redirect to results page
+			HttpAPIStatus apiStatus = Collection.creationCollection((Collection) validation.getObject());
+			request.setAttribute("apiStatus", apiStatus);
+			RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/results.jsp");
+			dispatcher.forward(request,response);
 		} else {
 			System.out.println(validation.getResult()); //TODO this is where you should redirect back to input page with validation error.
 		}

@@ -444,11 +444,29 @@ public class FedoraFile {
 						Matcher pathMatcher = pathPattern.matcher(trimmedLine);
 						while (pathMatcher.find()) {
 							String fileName = URLDecoder.decode(pathMatcher.group(1), StandardCharsets.UTF_8.name());
+							FedoraFile file = new FedoraFile();
+							file.setFileName(fileName);
+							file.setTitle(Metadata.getMetadataValue(collectionName, fileName, "title"));
+							file.setCreator(Metadata.getMetadataValue(collectionName, fileName, "creator"));
+							file.setSubject(Metadata.getMetadataValue(collectionName, fileName, "subject"));
+							file.setDescription(Metadata.getMetadataValue(collectionName, fileName, "description"));
+							file.setPublisher(Metadata.getMetadataValue(collectionName, fileName, "publisher"));
+							file.setContributor(Metadata.getMetadataValue(collectionName, fileName, "contributor"));
+							file.setsDate(Metadata.getMetadataValue(collectionName, fileName, "sDate"));
+							file.setType(Metadata.getMetadataValue(collectionName, fileName, "type"));
+							file.setFormat(Metadata.getMetadataValue(collectionName, fileName, "format"));
+							file.setIdentifier(Metadata.getMetadataValue(collectionName, fileName, "identifier"));
+							file.setSource(Metadata.getMetadataValue(collectionName, fileName, "source"));
+							file.setLanguage(Metadata.getMetadataValue(collectionName, fileName, "language"));
+							file.setCoverage(Metadata.getMetadataValue(collectionName, fileName, "coverage"));
+							file.setRights(Metadata.getMetadataValue(collectionName, fileName, "rights"));
+							files.add(file);
 							System.out.println(fileName);
 							//TODO get metadata for file.
 						}
 					}
 				}
+				return files;
 			} catch (IOException ex) {
 				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
 			}

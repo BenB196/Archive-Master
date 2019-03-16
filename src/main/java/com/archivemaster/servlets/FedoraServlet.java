@@ -4,7 +4,6 @@ import com.archivemaster.fedora.Collection;
 import com.archivemaster.fedora.FedoraFile;
 import com.archivemaster.validation.HttpAPIStatus;
 import com.archivemaster.validation.Validation;
-import org.apache.commons.io.IOUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -12,9 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import java.io.*;
-import java.nio.file.Paths;
 
 @WebServlet("/fedora")
 @MultipartConfig
@@ -39,10 +36,6 @@ public class FedoraServlet extends HttpServlet {
 		} else if (submit.equalsIgnoreCase("Search Collection")) {
 			String collectionName = request.getParameter("collectionName");
 			System.out.println(FedoraFile.getFiles(collectionName));
-		} else if (submit.equalsIgnoreCase("Upload File")) {
-
-
-
 		} else if (submit.equalsIgnoreCase("Delete File")) {
 			final String collectionName = request.getParameter("collectionName");
 			final String fileName = request.getParameter("fileName");

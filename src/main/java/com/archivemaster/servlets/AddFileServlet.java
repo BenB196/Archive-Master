@@ -4,6 +4,7 @@ import com.archivemaster.fedora.FedoraFile;
 import com.archivemaster.validation.HttpAPIStatus;
 import org.apache.commons.io.IOUtils;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -16,9 +17,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
 
-@WebServlet("/addRecord")
+@WebServlet("/addFile")
 @MultipartConfig
-public class AddRecord extends HttpServlet {
+public class AddFileServlet extends HttpServlet {
 	@Override
 	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		final Part filePart = request.getPart("file");
@@ -49,7 +50,9 @@ public class AddRecord extends HttpServlet {
 
 		//TODO FedoraFile validation
 
-		HttpAPIStatus addRecord = FedoraFile.createFedoraFile(file);
-		System.out.println(addRecord.isSuccess()); //TODO this is where you should redirect to results page
+		HttpAPIStatus apiStatus = FedoraFile.createFedoraFile(file);
+		request.setAttribute("apiStatus", apiStatus);
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/results.jsp");
+		dispatcher.forward(request,response);
 	}
 }

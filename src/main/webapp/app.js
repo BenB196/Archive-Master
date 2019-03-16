@@ -26,8 +26,11 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
   .when('/add-record', {
     templateUrl : './views/addRecord.jsp'
   })
+  .when('/search-collections', {
+    templateUrl: './views/searchCollections.jsp'
+  })
   .when('/search', {
-    templateUrl: './views/search.html'
+    templateUrl: './views/search.jsp'
   }).otherwise({
     redirectTo: '/'
   });
