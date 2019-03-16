@@ -379,25 +379,17 @@ public class FedoraFile {
 			//Delete File
 			try {
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
 				connection.setRequestMethod("DELETE");
-
 				HttpAPIStatus deleteFileStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
-
 				connection.disconnect();
 
 				//Delete File tombstone
 				if (deleteFileStatus.isSuccess()) {
 					url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, "UTF-8") + Fedora.TOMBSTONEURL);
-
 					connection = (HttpURLConnection) url.openConnection();
-
 					connection.setRequestMethod("DELETE");
-
 					HttpAPIStatus deleteFileTomeStoneStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
-
 					connection.disconnect();
-
 					return deleteFileTomeStoneStatus;
 				} else {
 					return deleteFileStatus;
