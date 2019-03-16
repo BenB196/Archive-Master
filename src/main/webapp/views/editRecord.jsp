@@ -18,7 +18,7 @@
   <header ng-include="'header.html'"></header>
 
   <div class="text-center text-primary">
-    <h1 class="display-4">Add File to Collection</h1>
+    <h1 class="display-4">Edit File in Collection</h1>
     <hr />
     <h3 style="color:#ff9900">Collections allow you to group related files</h3>
   </div>
@@ -36,49 +36,47 @@
       </div>
       <div class="form-group">
         <label for="creator">Creator</label>
-        <input type="text" class="form-control" name="creator" id="creator" required>
+        <input type="text" class="form-control" name="creator" id="creator" value="${file.creator}" required>
       </div>
       <div class="form-group">
         <label for="subject">Subject</label>
-        <input type="text" class="form-control" name="subject" id="subject" required>
+        <input type="text" class="form-control" name="subject" id="subject" value="${file.subject}" required>
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" class="form-control" name="description" id="description" required>
+        <input type="text" class="form-control" name="description" id="description" value="${file.description}" required>
       </div>
       <div class="form-group">
         <label for="publisher">Publisher</label>
-        <input type="text" class="form-control" name="publisher" id="publisher" required>
+        <input type="text" class="form-control" name="publisher" id="publisher" value="${file.publisher}" required>
       </div>
       <div class="form-group">
         <label for="contributor">Contributor</label>
-        <input type="text" class="form-control" name="contributor" id="contributor" required>
+        <input type="text" class="form-control" name="contributor" id="contributor" value="${file.contributor}" required>
       </div>
       <div class="form-group">
         <label for="sDate">Date</label>
-        <input type="text" class="form-control" name="sDate" id="sDate" required>
+        <input type="text" class="form-control" name="sDate" id="sDate" value="${file.sDate}" required>
       </div>
-      <!--
       <div class="form-group">
         <label for="type">Type</label>
-        <input type="text" class="form-control" name="" id="type">
+        <input type="text" class="form-control" name="type" id="type" value="${file.type}" readonly>
       </div>
       <div class="form-group">
         <label for="format">Format</label>
-        <input type="text" class="form-control" name="" id="format">
+        <input type="text" class="form-control" name="format" id="format" value="${file.format}" readonly>
       </div>
-      -->
       <div class="form-group">
         <label for="identifier">Identifier</label>
-        <input type="text" class="form-control" name="identifier" id="identifier" required>
+        <input type="text" class="form-control" name="identifier" id="identifier" value="${file.identifier}" required>
       </div>
       <div class="form-group">
         <label for="source">Source</label>
-        <input type="text" class="form-control" name="source" id="source" required>
+        <input type="text" class="form-control" name="source" id="source" value="${file.source}" required>
       </div>
       <div class="form-group">
         <label for="language">Language</label>
-        <input type="text" class="form-control" name="language" id="language" required>
+        <input type="text" class="form-control" name="language" id="language" value="${file.language}" required>
       </div>
       <!--
       <div class="form-group">
@@ -88,17 +86,23 @@
       -->
       <div class="form-group">
         <label for="coverage">Coverage</label>
-        <input type="text" class="form-control" name="coverage" id="coverage" required>
+        <input type="text" class="form-control" name="coverage" id="coverage" value="${file.coverage}" required>
       </div>
       <div class="form-group">
         <label for="rights">Rights</label>
-        <input type="text" class="form-control" name="rights" id="rights" required>
+        <input type="text" class="form-control" name="rights" id="rights" value="${file.rights}" required>
       </div>
       <div class="form-group">
         <label for="file">Select File</label>
         <input type="file" class="form-control" name="file" id="file" required>
       </div>
       <button class="button-orange button-hover">Submit</button>
+    </form>
+  </div>
+
+  <div class="text-center">
+    <form action="${pageContext.request.contextPath}/deleteFile" method="post" enctype="multipart/form-data">
+      <button class="button-orange button-hover" type="submit" value="${collectionName}/${file.fileName}" name="deleteFile">Delete File</button>
     </form>
   </div>
 </body>

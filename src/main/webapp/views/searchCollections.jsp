@@ -20,12 +20,4 @@
     <input type="text" name="fileName"><br>
     <input type="submit" name="submit" value="Delete File">
   </form>
-
-  <br>
-  <h2>Search Collection for Files</h2>
-
-  <form action="${pageContext.request.contextPath}/fedora" method="post">
-    <input type="text" name="collectionName">
-    <input type="submit" name="submit" value="Search Collection">
-  </form>
 </div>

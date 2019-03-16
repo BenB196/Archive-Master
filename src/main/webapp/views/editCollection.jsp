@@ -57,7 +57,7 @@
                     <td>${file.title}</td>
                     <td>${file.creator}</td>
                     <td>${file.description}</td>
-                    <td><button class="button-orange button-hover" type="submit" name="editFile" value="${file.fileName}">Edit</button></td>
+                    <td><button class="button-orange button-hover" type="submit" name="editFile" value="${collection.name}/${file.fileName}">Edit</button></td>
                 </tr>
             </c:forEach>
             </tbody>
@@ -69,12 +69,5 @@
             <button class="button-orange button-hover" type="submit" value="${collection.name}" name="deleteCollection">Delete Collection</button>
         </form>
     </div>
-    <!--
-    Collection Name
-    Collection Description
-    Add File
-    List Files
-    Delete Collection
-    -->
 </body>
 </html>
