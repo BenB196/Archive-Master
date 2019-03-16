@@ -70,7 +70,7 @@ public class Metadata {
 
 	public static String getMetadataValue (String collectionName, String fileName, String metadataName) {
 		try {
-			URL url = (isEmptyString(fileName)) ? new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8")) : new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()));
+			URL url = (isEmptyString(fileName)) ? new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8")) : new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()) + Fedora.METADATAURL);
 
 			try {
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();

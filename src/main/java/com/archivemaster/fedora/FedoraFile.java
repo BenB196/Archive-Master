@@ -379,25 +379,17 @@ public class FedoraFile {
 			//Delete File
 			try {
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
 				connection.setRequestMethod("DELETE");
-
 				HttpAPIStatus deleteFileStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
-
 				connection.disconnect();
 
 				//Delete File tombstone
 				if (deleteFileStatus.isSuccess()) {
 					url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8") + "/" + URLEncoder.encode(fileName, "UTF-8") + Fedora.TOMBSTONEURL);
-
 					connection = (HttpURLConnection) url.openConnection();
-
 					connection.setRequestMethod("DELETE");
-
 					HttpAPIStatus deleteFileTomeStoneStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
-
 					connection.disconnect();
-
 					return deleteFileTomeStoneStatus;
 				} else {
 					return deleteFileStatus;
@@ -444,8 +436,84 @@ public class FedoraFile {
 						Matcher pathMatcher = pathPattern.matcher(trimmedLine);
 						while (pathMatcher.find()) {
 							String fileName = URLDecoder.decode(pathMatcher.group(1), StandardCharsets.UTF_8.name());
+							FedoraFile file = new FedoraFile();
+							file.setFileName(fileName);
+							file.setTitle(Metadata.getMetadataValue(collectionName, fileName, "title"));
+							file.setCreator(Metadata.getMetadataValue(collectionName, fileName, "creator"));
+							file.setSubject(Metadata.getMetadataValue(collectionName, fileName, "subject"));
+							file.setDescription(Metadata.getMetadataValue(collectionName, fileName, "description"));
+							file.setPublisher(Metadata.getMetadataValue(collectionName, fileName, "publisher"));
+							file.setContributor(Metadata.getMetadataValue(collectionName, fileName, "contributor"));
+							file.setsDate(Metadata.getMetadataValue(collectionName, fileName, "sDate"));
+							file.setType(Metadata.getMetadataValue(collectionName, fileName, "type"));
+							file.setFormat(Metadata.getMetadataValue(collectionName, fileName, "format"));
+							file.setIdentifier(Metadata.getMetadataValue(collectionName, fileName, "identifier"));
+							file.setSource(Metadata.getMetadataValue(collectionName, fileName, "source"));
+							file.setLanguage(Metadata.getMetadataValue(collectionName, fileName, "language"));
+							file.setCoverage(Metadata.getMetadataValue(collectionName, fileName, "coverage"));
+							file.setRights(Metadata.getMetadataValue(collectionName, fileName, "rights"));
+							files.add(file);
 							System.out.println(fileName);
 							//TODO get metadata for file.
+						}
+					}
+				}
+				return files;
+			} catch (IOException ex) {
+				System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+			}
+
+		} catch (UnsupportedEncodingException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		} catch (MalformedURLException ex) {
+			System.out.println(ex.getMessage()); //TODO throw some sort of error message back and handle cleanly.
+		}
+		return null;
+	}
+
+	public static FedoraFile getFedoraFile(String collectionName, String fileName) {
+		try {
+			URL url = new URL(Fedora.RESTURL + URLEncoder.encode(collectionName, "UTF-8"));
+
+			try {
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("GET");
+
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String line;
+
+				Pattern p = Pattern.compile("<li><a href=\"" + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + ".+</a></li>");
+				Matcher m = p.matcher("");
+
+				String pathRegex = Pattern.quote("<li><a href=\"") + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + "/" + "(.*?)" + Pattern.quote("</a></li>");
+				System.out.println(pathRegex);
+				Pattern pathPattern = Pattern.compile(pathRegex);
+
+				while ((line = reader.readLine()) != null) {
+					String trimmedLine = line.trim();
+					if (m.reset(trimmedLine).matches()) {
+						Matcher pathMatcher = pathPattern.matcher(trimmedLine);
+						while (pathMatcher.find()) {
+							String fileNameAPI = URLDecoder.decode(pathMatcher.group(1), StandardCharsets.UTF_8.name());
+							if (fileNameAPI.equalsIgnoreCase(fileName)) {
+								FedoraFile file = new FedoraFile();
+								file.setFileName(fileNameAPI);
+								file.setTitle(Metadata.getMetadataValue(collectionName, fileName, "title"));
+								file.setCreator(Metadata.getMetadataValue(collectionName, fileName, "creator"));
+								file.setSubject(Metadata.getMetadataValue(collectionName, fileName, "subject"));
+								file.setDescription(Metadata.getMetadataValue(collectionName, fileName, "description"));
+								file.setPublisher(Metadata.getMetadataValue(collectionName, fileName, "publisher"));
+								file.setContributor(Metadata.getMetadataValue(collectionName, fileName, "contributor"));
+								file.setsDate(Metadata.getMetadataValue(collectionName, fileName, "sDate"));
+								file.setType(Metadata.getMetadataValue(collectionName, fileName, "type"));
+								file.setFormat(Metadata.getMetadataValue(collectionName, fileName, "format"));
+								file.setIdentifier(Metadata.getMetadataValue(collectionName, fileName, "identifier"));
+								file.setSource(Metadata.getMetadataValue(collectionName, fileName, "source"));
+								file.setLanguage(Metadata.getMetadataValue(collectionName, fileName, "language"));
+								file.setCoverage(Metadata.getMetadataValue(collectionName, fileName, "coverage"));
+								file.setRights(Metadata.getMetadataValue(collectionName, fileName, "rights"));
+								return file;
+							}
 						}
 					}
 				}

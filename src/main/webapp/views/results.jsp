@@ -12,11 +12,10 @@
     <script src="lib/angular-route.min.js"></script>
     <script src="app.js"></script>
 </head>
-
 <body class="body">
     <header ng-include="'header.html'"></header>
-    <main ng-view></main>
+    ${apiStatus.success}
+    ${apiStatus.responseCode}
+    ${apiStatus.responseMessage}
 </body>
-
 </html>
-
