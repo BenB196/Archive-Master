@@ -31,6 +31,10 @@
       </div>
       -->
       <div class="form-group">
+        <label for="whatDo">Collection Name</label>
+        <input type="text" class="form-control" name="whatDo" value="${whatDo}" id="whatDo" readonly>
+      </div>
+      <div class="form-group">
         <label for="collectionName">Collection Name</label>
         <input type="text" class="form-control" name="collectionName" value="${collectionName}" id="collectionName" readonly>
       </div>

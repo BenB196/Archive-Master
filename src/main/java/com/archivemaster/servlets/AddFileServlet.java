@@ -22,6 +22,7 @@ import java.nio.file.Paths;
 public class AddFileServlet extends HttpServlet {
 	@Override
 	protected void doPost (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		final String whatDo = request.getParameter("whatDo");
 		final Part filePart = request.getPart("file");
 		final InputStream inputStream = filePart.getInputStream();
 		byte[] byteArray = IOUtils.toByteArray(inputStream); //Need to store input stream for multiple uses
@@ -50,7 +51,14 @@ public class AddFileServlet extends HttpServlet {
 
 		//TODO FedoraFile validation
 
-		HttpAPIStatus apiStatus = FedoraFile.createFedoraFile(file);
+		HttpAPIStatus apiStatus = null;
+
+		if ((whatDo != null && !whatDo.isEmpty()) && whatDo.equalsIgnoreCase("edit")) {
+			apiStatus = FedoraFile.editFedoraFile(file);
+		} else {
+			apiStatus = FedoraFile.createFedoraFile(file);
+		}
+
 		request.setAttribute("apiStatus", apiStatus);
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/results.jsp");
 		dispatcher.forward(request,response);

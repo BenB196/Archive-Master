@@ -52,6 +52,12 @@ public class Metadata {
 
 			connection.disconnect();
 
+			if (addMetadataStatus.isSuccess()) {
+				addMetadataStatus.setResponseMessage("Added Metadata Value");
+			} else {
+				addMetadataStatus.setResponseMessage("Failed to Add Metadata Value");
+			}
+
 			return addMetadataStatus;
 
 		} catch (IOException ex) {

@@ -355,6 +355,7 @@ public class FedoraFile {
 					HttpAPIStatus addRightsStatus = Metadata.addMetadata("rights", file.getRights(), url);
 					return addRightsStatus;
 				} else {
+					addFileStatus.setResponseMessage("Failed to Add File");
 					return addFileStatus;
 				}
 
@@ -390,8 +391,15 @@ public class FedoraFile {
 					connection.setRequestMethod("DELETE");
 					HttpAPIStatus deleteFileTomeStoneStatus = new HttpAPIStatus(HttpAPIStatus.getSuccessFromCode(connection.getResponseCode()),connection.getResponseCode(),connection.getResponseMessage());
 					connection.disconnect();
+
+					if (deleteFileTomeStoneStatus.isSuccess()) {
+						deleteFileTomeStoneStatus.setResponseMessage("Deleted File");
+					} else {
+						deleteFileTomeStoneStatus.setResponseMessage("Failed to Delete File");
+					}
 					return deleteFileTomeStoneStatus;
 				} else {
+					deleteFileStatus.setResponseMessage("Failed to Delete File");
 					return deleteFileStatus;
 				}
 
@@ -409,8 +417,21 @@ public class FedoraFile {
 	}
 
 	//TODO I do not like how this only returns a boolean, it should have a better response
-	public static boolean editFile (FedoraFile file) {
-		return false; //TODO edit file
+	public static HttpAPIStatus editFedoraFile (FedoraFile file) {
+		HttpAPIStatus deleteFileStatus = deleteFile(file.collectionName, file.fileName);
+
+		if (deleteFileStatus.isSuccess()) {
+			HttpAPIStatus createFileStatus = createFedoraFile(file);
+			if (createFileStatus.isSuccess()) {
+				createFileStatus.setResponseMessage("Updated File");
+			} else {
+				createFileStatus.setResponseMessage("Failed to Update File");
+			}
+			return createFileStatus;
+		} else {
+			deleteFileStatus.setResponseMessage("Failed to Update File");
+			return deleteFileStatus;
+		}
 	}
 
 	public static ArrayList<FedoraFile> getFiles (String collectionName) {
