@@ -109,6 +109,8 @@
       <button class="button-orange button-hover" type="submit" value="${collectionName}/${file.fileName}" name="deleteFile">Delete File</button>
     </form>
   </div>
+
+  <a  href="./"><button class="button-orange button-hover">Go Home</button></a>
 </body>
 </html>
 
