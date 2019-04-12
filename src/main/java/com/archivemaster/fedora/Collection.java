@@ -118,6 +118,7 @@ public class Collection {
 					//Add collection description
 					return Metadata.addMetadata("description", collection.getDescription(), url);
 				} else {
+					addCollectionStatus.setResponseMessage("Failed to Add Collection");
 					return addCollectionStatus;
 				}
 			} catch (IOException ex) {
@@ -157,8 +158,15 @@ public class Collection {
 
 					connection.disconnect();
 
+					if (deleteCollectionTombStoneStatus.isSuccess()) {
+						deleteCollectionTombStoneStatus.setResponseMessage("Deleted Collection");
+					} else {
+						deleteCollectionTombStoneStatus.setResponseMessage("Failed to Delete Collection");
+					}
+
 					return deleteCollectionTombStoneStatus;
 				} else {
+					deleteCollectionStatus.setResponseMessage("Failed to Delete Collection");
 					return deleteCollectionStatus;
 				}
 

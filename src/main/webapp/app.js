@@ -8,8 +8,8 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
   .when('/', {
     templateUrl: './views/home.html'
   })
-  .when('/admin-dashboard', {
-    templateUrl: './views/adminDashboard.html'
+  .when('/settings-dashboard', {
+    templateUrl: './views/settingsDashboard.html'
   })
   .when('/arch-dashboard', {
     templateUrl: './views/archDashboard.html'

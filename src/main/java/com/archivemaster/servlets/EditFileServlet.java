@@ -23,6 +23,7 @@ public class EditFileServlet extends HttpServlet {
 		FedoraFile file = FedoraFile.getFedoraFile(collectionName, fileName);
 		request.setAttribute("file", file);
 		request.setAttribute("collectionName", collectionName);
+		request.setAttribute("whatDo", "edit");
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/views/editRecord.jsp");
 		dispatcher.forward(request,response);
 	}

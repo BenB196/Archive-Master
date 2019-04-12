@@ -31,6 +31,10 @@
       </div>
       -->
       <div class="form-group">
+        <label for="whatDo">Collection Name</label>
+        <input type="text" class="form-control" name="whatDo" value="${whatDo}" id="whatDo" readonly>
+      </div>
+      <div class="form-group">
         <label for="collectionName">Collection Name</label>
         <input type="text" class="form-control" name="collectionName" value="${collectionName}" id="collectionName" readonly>
       </div>
@@ -105,6 +109,8 @@
       <button class="button-orange button-hover" type="submit" value="${collectionName}/${file.fileName}" name="deleteFile">Delete File</button>
     </form>
   </div>
+
+  <a  href="./"><button class="button-orange button-hover">Go Home</button></a>
 </body>
 </html>
 

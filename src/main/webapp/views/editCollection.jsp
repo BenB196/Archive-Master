@@ -69,5 +69,6 @@
             <button class="button-orange button-hover" type="submit" value="${collection.name}" name="deleteCollection">Delete Collection</button>
         </form>
     </div>
+    <a  href="./"><button class="button-orange button-hover">Go Home</button></a>
 </body>
 </html>

@@ -14,8 +14,12 @@
 </head>
 <body class="body">
     <header ng-include="'header.html'"></header>
-    ${apiStatus.success}
-    ${apiStatus.responseCode}
+    <!--${apiStatus.success}
+    ${apiStatus.responseCode}-->
     ${apiStatus.responseMessage}
+
+    <br/>
+
+    <a  href="./"><button class="button-orange button-hover">Go Home</button></a>
 </body>
 </html>
