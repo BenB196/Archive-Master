@@ -29,6 +29,9 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
   .when('/search-collections', {
     templateUrl: './views/searchCollections.jsp'
   })
+  .when('/search-dashboard', {
+    templateUrl: './views/searchPage.jsp'
+  })
   .when('/search', {
     templateUrl: './views/search.jsp'
   }).otherwise({

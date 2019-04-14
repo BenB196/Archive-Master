@@ -473,6 +473,7 @@ public class FedoraFile {
 							file.setLanguage(Metadata.getMetadataValue(collectionName, fileName, "language"));
 							file.setCoverage(Metadata.getMetadataValue(collectionName, fileName, "coverage"));
 							file.setRights(Metadata.getMetadataValue(collectionName, fileName, "rights"));
+							file.setCollectionName(collectionName);
 							files.add(file);
 							System.out.println(fileName);
 							//TODO get metadata for file.
