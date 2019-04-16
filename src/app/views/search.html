@@ -1,14 +1,21 @@
-<div class="container-fluid">
-  <h2 class="display-3">Results</h2>
-  <div class="form-group">
-    <label for="sel1">Select list:</label>
-    <select class="form-control" id="sel1">
-      <option>1</option>
-      <option>2</option>
-      <option>3</option>
-      <option>4</option>
-    </select>
+<div class="text-center">
+  <h1 class="text-primary display-3">Search Archives</h1>
+</div>
+
+<div class="container mx">
+  <div class="row">
+    <div class="form-group col-4">
+      <label for="sel1">Search type:</label>
+      <select class="form-control" id="sel1" style="width: 300px">
+        <option>Name</option>
+        <option>Subject</option>
+        <option>Title</option>
+        <option>Keyword</option>
+      </select>
+    </div>
+    <div class="col-6">
+      <input type="text" placeholder="Search.." style="width:300px" />
+      <button class="button-orange">Search</button>
+    </div>
   </div>
-  <input type="text" placeholder="Search.."/>
-  <button class ="button-orange">Search</button>
 </div>

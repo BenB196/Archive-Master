@@ -2,6 +2,15 @@ var ArchiveMaster = angular.module('ArchiveMaster', [
   'ngRoute'
 ]);
 
+ArchiveMaster.controller('addCollection', ['$scope', function($scope) {
+    $scope.submit = function() {
+      $scope.showAlert = false;
+    };
+    $scope.removeAlert = function() {
+      $scope.showAlert = null;
+    }
+}]);
+
 ArchiveMaster.config(['$routeProvider', function($routeProvider) {
 
   $routeProvider
@@ -26,6 +35,9 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
   .when('/add-record', {
     templateUrl : 'views/addRecord.html'
   })
+  .when('/results', {
+    templateUrl : 'views/results.html'
+  })
   .when('/search', {
     templateUrl: 'views/search.html'
   }).otherwise({
@@ -34,6 +46,6 @@ ArchiveMaster.config(['$routeProvider', function($routeProvider) {
 
 }]);
 
-ArchiveMaster.controller('Controller', ['$scope', function($scope){
+ArchiveMaster.controller('Angularontroller', ['$scope', function($scope){
 
 }]);
