@@ -445,10 +445,12 @@ public class FedoraFile {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				String line;
 
-				Pattern p = Pattern.compile("<li><a href=\"" + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + ".+</a></li>");
+				String collectionNameFixed = collectionName.replaceAll("\\s","%20");
+
+				Pattern p = Pattern.compile("<li><a href=\"" + Fedora.RESTURL + collectionNameFixed + ".+\">" + Fedora.RESTURL + collectionNameFixed + ".+</a></li>");
 				Matcher m = p.matcher("");
 
-				String pathRegex = Pattern.quote("<li><a href=\"") + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + "/" + "(.*?)" + Pattern.quote("</a></li>");
+				String pathRegex = Pattern.quote("<li><a href=\"") + Fedora.RESTURL + collectionNameFixed + ".+\">" + Fedora.RESTURL + collectionNameFixed + "/" + "(.*?)" + Pattern.quote("</a></li>");
 				System.out.println(pathRegex);
 				Pattern pathPattern = Pattern.compile(pathRegex);
 				while ((line = reader.readLine()) != null) {
@@ -504,10 +506,12 @@ public class FedoraFile {
 				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				String line;
 
-				Pattern p = Pattern.compile("<li><a href=\"" + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + ".+</a></li>");
+				String collectionNameFixed = collectionName.replaceAll("\\s","%20");
+
+				Pattern p = Pattern.compile("<li><a href=\"" + Fedora.RESTURL + collectionNameFixed + ".+\">" + Fedora.RESTURL + collectionNameFixed + ".+</a></li>");
 				Matcher m = p.matcher("");
 
-				String pathRegex = Pattern.quote("<li><a href=\"") + Fedora.RESTURL + collectionName + ".+\">" + Fedora.RESTURL + collectionName + "/" + "(.*?)" + Pattern.quote("</a></li>");
+				String pathRegex = Pattern.quote("<li><a href=\"") + Fedora.RESTURL + collectionNameFixed + ".+\">" + Fedora.RESTURL + collectionNameFixed + "/" + "(.*?)" + Pattern.quote("</a></li>");
 				System.out.println(pathRegex);
 				Pattern pathPattern = Pattern.compile(pathRegex);
 
