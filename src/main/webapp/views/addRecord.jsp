@@ -36,27 +36,27 @@
       </div>
       <div class="form-group">
         <label for="creator">Creator</label>
-        <input type="text" class="form-control" name="creator" id="creator" required>
+        <input type="text" class="form-control" name="creator" id="creator">
       </div>
       <div class="form-group">
         <label for="subject">Subject</label>
-        <input type="text" class="form-control" name="subject" id="subject" required>
+        <input type="text" class="form-control" name="subject" id="subject">
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" class="form-control" name="description" id="description" required>
+        <input type="text" class="form-control" name="description" id="description">
       </div>
       <div class="form-group">
         <label for="publisher">Publisher</label>
-        <input type="text" class="form-control" name="publisher" id="publisher" required>
+        <input type="text" class="form-control" name="publisher" id="publisher">
       </div>
       <div class="form-group">
         <label for="contributor">Contributor</label>
-        <input type="text" class="form-control" name="contributor" id="contributor" required>
+        <input type="text" class="form-control" name="contributor" id="contributor">
       </div>
       <div class="form-group">
         <label for="sDate">Date</label>
-        <input type="text" class="form-control" name="sDate" id="sDate" required>
+        <input type="text" class="form-control" name="sDate" id="sDate">
       </div>
       <!--
       <div class="form-group">
@@ -70,15 +70,15 @@
       -->
       <div class="form-group">
         <label for="identifier">Identifier</label>
-        <input type="text" class="form-control" name="identifier" id="identifier" required>
+        <input type="text" class="form-control" name="identifier" id="identifier">
       </div>
       <div class="form-group">
         <label for="source">Source</label>
-        <input type="text" class="form-control" name="source" id="source" required>
+        <input type="text" class="form-control" name="source" id="source">
       </div>
       <div class="form-group">
         <label for="language">Language</label>
-        <input type="text" class="form-control" name="language" id="language" required>
+        <input type="text" class="form-control" name="language" id="language">
       </div>
       <!--
       <div class="form-group">
@@ -88,11 +88,11 @@
       -->
       <div class="form-group">
         <label for="coverage">Coverage</label>
-        <input type="text" class="form-control" name="coverage" id="coverage" required>
+        <input type="text" class="form-control" name="coverage" id="coverage">
       </div>
       <div class="form-group">
         <label for="rights">Rights</label>
-        <input type="text" class="form-control" name="rights" id="rights" required>
+        <input type="text" class="form-control" name="rights" id="rights">
       </div>
       <div class="form-group">
         <label for="file">Select File</label>

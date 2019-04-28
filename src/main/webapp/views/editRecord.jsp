@@ -40,47 +40,47 @@
       </div>
       <div class="form-group">
         <label for="creator">Creator</label>
-        <input type="text" class="form-control" name="creator" id="creator" value="${file.creator}" required>
+        <input type="text" class="form-control" name="creator" id="creator" value="${file.creator}">
       </div>
       <div class="form-group">
         <label for="subject">Subject</label>
-        <input type="text" class="form-control" name="subject" id="subject" value="${file.subject}" required>
+        <input type="text" class="form-control" name="subject" id="subject" value="${file.subject}">
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <input type="text" class="form-control" name="description" id="description" value="${file.description}" required>
+        <input type="text" class="form-control" name="description" id="description" value="${file.description}">
       </div>
       <div class="form-group">
         <label for="publisher">Publisher</label>
-        <input type="text" class="form-control" name="publisher" id="publisher" value="${file.publisher}" required>
+        <input type="text" class="form-control" name="publisher" id="publisher" value="${file.publisher}">
       </div>
       <div class="form-group">
         <label for="contributor">Contributor</label>
-        <input type="text" class="form-control" name="contributor" id="contributor" value="${file.contributor}" required>
+        <input type="text" class="form-control" name="contributor" id="contributor" value="${file.contributor}">
       </div>
       <div class="form-group">
         <label for="sDate">Date</label>
-        <input type="text" class="form-control" name="sDate" id="sDate" value="${file.sDate}" required>
+        <input type="text" class="form-control" name="sDate" id="sDate" value="${file.sDate}">
       </div>
       <div class="form-group">
         <label for="type">Type</label>
-        <input type="text" class="form-control" name="type" id="type" value="${file.type}" readonly>
+        <input type="text" class="form-control" name="type" id="type" value="${file.type}">
       </div>
       <div class="form-group">
         <label for="format">Format</label>
-        <input type="text" class="form-control" name="format" id="format" value="${file.format}" readonly>
+        <input type="text" class="form-control" name="format" id="format" value="${file.format}">
       </div>
       <div class="form-group">
         <label for="identifier">Identifier</label>
-        <input type="text" class="form-control" name="identifier" id="identifier" value="${file.identifier}" required>
+        <input type="text" class="form-control" name="identifier" id="identifier" value="${file.identifier}">
       </div>
       <div class="form-group">
         <label for="source">Source</label>
-        <input type="text" class="form-control" name="source" id="source" value="${file.source}" required>
+        <input type="text" class="form-control" name="source" id="source" value="${file.source}">
       </div>
       <div class="form-group">
         <label for="language">Language</label>
-        <input type="text" class="form-control" name="language" id="language" value="${file.language}" required>
+        <input type="text" class="form-control" name="language" id="language" value="${file.language}">
       </div>
       <!--
       <div class="form-group">
@@ -90,11 +90,11 @@
       -->
       <div class="form-group">
         <label for="coverage">Coverage</label>
-        <input type="text" class="form-control" name="coverage" id="coverage" value="${file.coverage}" required>
+        <input type="text" class="form-control" name="coverage" id="coverage" value="${file.coverage}">
       </div>
       <div class="form-group">
         <label for="rights">Rights</label>
-        <input type="text" class="form-control" name="rights" id="rights" value="${file.rights}" required>
+        <input type="text" class="form-control" name="rights" id="rights" value="${file.rights}">
       </div>
       <div class="form-group">
         <label for="file">Select File</label>
