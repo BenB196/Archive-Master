@@ -31,11 +31,11 @@
       </div>
       -->
       <div class="form-group">
-        <label for="collectionName">Collection Name</label>
+        <label for="collectionName">Collection Name <a href="#" data-toggle="tooltip" data-placement="top" title="The collection that the current record belongs to."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="collectionName" value="${collectionName}" id="collectionName" readonly>
       </div>
       <div class="form-group">
-        <label for="creator">Creator</label>
+        <label for="creator">Creator <a href="#" data-toggle="tooltip" data-placement="top" title="The person or organization who created the resource."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="creator" id="creator">
       </div>
       <div class="form-group">
@@ -43,15 +43,15 @@
         <input type="text" class="form-control" name="subject" id="subject">
       </div>
       <div class="form-group">
-        <label for="description">Description</label>
+        <label for="description">Description <a href="#" data-toggle="tooltip" data-placement="top" title="A description of the resource's content."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="description" id="description">
       </div>
       <div class="form-group">
-        <label for="publisher">Publisher</label>
+        <label for="publisher">Publisher <a href="#" data-toggle="tooltip" data-placement="top" title="The organization that published the resource."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="publisher" id="publisher">
       </div>
       <div class="form-group">
-        <label for="contributor">Contributor</label>
+        <label for="contributor">Contributor <a href="#" data-toggle="tooltip" data-placement="top" title="People or organizations, other than the creator, that made significant contributions to the creation or availability of the resource."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="contributor" id="contributor">
       </div>
       <div class="form-group">
@@ -69,7 +69,7 @@
       </div>
       -->
       <div class="form-group">
-        <label for="identifier">Identifier</label>
+        <label for="identifier">Identifier <a href="#" data-toggle="tooltip" data-placement="top" title="The unique identifier of the resource (URL, ISBN, item/serial number, etc.)."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="identifier" id="identifier">
       </div>
       <div class="form-group">
@@ -95,7 +95,7 @@
         <input type="text" class="form-control" name="rights" id="rights">
       </div>
       <div class="form-group">
-        <label for="file">Select File</label>
+        <label for="file">Select File <a href="#" data-toggle="tooltip" data-placement="top" title="Any digital file you want to save - it could be a letter, a photograph, a word document or anything else from your computer."><sup><b>i</b></sup></a></label>
         <input type="file" class="form-control" name="file" id="file" required>
       </div>
       <button class="button-orange button-hover">Add File</button>
