@@ -98,7 +98,7 @@
         <label for="file">Select File</label>
         <input type="file" class="form-control" name="file" id="file" required>
       </div>
-      <button class="button-orange button-hover">Submit</button>
+      <button class="button-orange button-hover">Add File</button>
     </form>
   </div>
 

@@ -1,8 +1,8 @@
 <%@ page import="com.archivemaster.fedora.Collection" %>
 <%@ taglib prefix = "c" uri="http://java.sun.com/jsp/jstl/core" %>
-<h2 class="text-primary display-4">Manage Your Archive Collections</h2>
+<h2 class="text-primary display-4">Manage Collections</h2>
 <div class="flex-container">
-  <a  href="./#!/add-collection"><button class="button-orange button-hover">Add Collection</button></a>
+  <a  href="./#!/add-collection"><button class="button-orange button-hover">Create Collection</button></a>
   <!--<a  href="./#!/search-collections"><button class="button-orange button-hover">Edit</button></a>-->
 </div>
 
@@ -21,7 +21,7 @@
         <tr>
           <td>${collection.name}</td>
           <td>${collection.description}</td>
-          <td><button class="button-orange button-hover" type="submit" name="editCollection" value="${collection.name}">Edit</button></td>
+          <td><button class="button-orange button-hover" type="submit" name="editCollection" value="${collection.name}">Edit Collection</button></td>
         </tr>
       </c:forEach>
       </tbody>
