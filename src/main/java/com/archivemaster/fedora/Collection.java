@@ -116,9 +116,15 @@ public class Collection {
 				//Check response of collection add before continuing
 				if (addCollectionStatus.isSuccess()) {
 					//Add collection description
-					return Metadata.addMetadata("description", collection.getDescription(), url);
+					HttpAPIStatus addDescription = Metadata.addMetadata("description", collection.getDescription(), url);
+					if (addDescription.isSuccess()) {
+						addDescription.setResponseMessage("Created Collection");
+					} else {
+						addDescription.setResponseMessage("Failed to Create Collection");
+					}
+					return addDescription;
 				} else {
-					addCollectionStatus.setResponseMessage("Failed to Add Collection");
+					addCollectionStatus.setResponseMessage("Failed to Create Collection");
 					return addCollectionStatus;
 				}
 			} catch (IOException ex) {

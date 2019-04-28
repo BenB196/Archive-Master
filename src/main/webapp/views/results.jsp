@@ -14,8 +14,9 @@
 </head>
 <body class="body">
     <header ng-include="'header.html'"></header>
-    <!--${apiStatus.success}
-    ${apiStatus.responseCode}-->
+
+    <br/>
+
     ${apiStatus.responseMessage}
 
     <br/>
