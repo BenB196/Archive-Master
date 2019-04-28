@@ -17,8 +17,9 @@
 
     <br/>
 
-    ${apiStatus.responseMessage}
+    <h1>${apiStatus.responseMessage}</h1>
 
+    <br/>
     <br/>
 
     <a  href="./"><button class="button-orange button-hover">Go Home</button></a>

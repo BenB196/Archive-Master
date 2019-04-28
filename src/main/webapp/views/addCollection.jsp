@@ -11,7 +11,7 @@
   </div>
   <div class="form-group">
     <label for="description">Description</label>
-    <input id="description" name="description" type="text" class="form-control" placeholder="What's in your collection?">
+    <input id="description" name="description" type="text" class="form-control" placeholder="What's in your collection?" required>
   </div>
   <button class="button-orange button-hover">Create Collection</button>
 </form>

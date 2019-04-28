@@ -353,6 +353,11 @@ public class FedoraFile {
 					HttpAPIStatus addCoverageStatus = Metadata.addMetadata("coverage", file.getCoverage(), url);
 					if (!addCoverageStatus.isSuccess()) return addCoverageStatus;
 					HttpAPIStatus addRightsStatus = Metadata.addMetadata("rights", file.getRights(), url);
+					if (addRightsStatus.isSuccess()) {
+						addRightsStatus.setResponseMessage("Added File to Collection");
+					} else {
+						addRightsStatus.setResponseMessage("Failed to Add File to Collection");
+					}
 					return addRightsStatus;
 				} else {
 					addFileStatus.setResponseMessage("Failed to Add File");
