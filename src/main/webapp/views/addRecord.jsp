@@ -151,6 +151,7 @@
           <option value="VI">Vietnamese</option>
           <option value="CY">Welsh</option>
           <option value="XH">Xhosa</option>
+        </select>
       </div>
       <!--
       <div class="form-group">
