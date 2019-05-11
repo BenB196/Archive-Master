@@ -43,7 +43,7 @@
         <input type="text" class="form-control" name="creator" id="creator" value="${file.creator}">
       </div>
       <div class="form-group">
-        <label for="subject">Subject</label>
+        <label for="subject">Subject <a href="#" data-toggle="tooltip" data-placement="top" title="A keyword or phrase that describes your item. For example, &quot;hats&quot;, or &quot;18th Century Headware&quot;."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="subject" id="subject" value="${file.subject}">
       </div>
       <div class="form-group">
@@ -59,7 +59,7 @@
         <input type="text" class="form-control" name="contributor" id="contributor" value="${file.contributor}">
       </div>
       <div class="form-group">
-        <label for="description">Date</label>
+        <label for="description">Date <a href="#" data-toggle="tooltip" data-placement="top" title="The year that the resource was created or became available."><sup><b>i</b></sup></a></label>
         <input title="The year that the resource was created or became available" type="number" min="1000" max="2099" step="1" value="2019" class="form-control" id="exampleInputPassword1">
       </div>
       <div class="form-group">
@@ -75,11 +75,11 @@
         <input type="text" class="form-control" name="identifier" id="identifier" value="${file.identifier}">
       </div>
       <div class="form-group">
-        <label for="source">Source</label>
+        <label for="source">Source <a href="#" data-toggle="tooltip" data-placement="top" title="Information about where this item came from, if relevant. For example, if your item is an article, then you might list the book it was published in."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="source" id="source" value="${file.source}">
       </div>
       <div class="form-group">
-        <label for="language">Language</label>
+        <label for="language">Language <a href="#" data-toggle="tooltip" data-placement="top" title="NOTE: When editing, the language defaults back to the first one. This issue is planned to be fixed in a future release. If a written document, the language it is written in."><sup><b>i</b></sup></a></label>
         <select class="form-control" name="language" id="language" required>
           <option value="AF">Afrikanns</option>
           <option value="SQ">Albanian</option>
@@ -162,15 +162,15 @@
       </div>
       -->
       <div class="form-group">
-        <label for="coverage">Coverage</label>
+        <label for="coverage">Coverage <a href="#" data-toggle="tooltip" data-placement="top" title="The physical location or time period the item originates from."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="coverage" id="coverage" value="${file.coverage}">
       </div>
       <div class="form-group">
-        <label for="rights">Rights</label>
+        <label for="rights">Rights <a href="#" data-toggle="tooltip" data-placement="top" title="The copyright statement or link to the copyright statement."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="rights" id="rights" value="${file.rights}">
       </div>
       <div class="form-group">
-        <label for="file">Select File <a href="#" data-toggle="tooltip" data-placement="top" title="Any digital file you want to save - it could be a letter, a photograph, a word document or anything else from your computer."><sup><b>i</b></sup></a></label>
+        <label for="file">Select File <a href="#" data-toggle="tooltip" data-placement="top" title="When editing a file, you need to re-upload the file before submitting. This is intended to be fixed in a future release. Any digital file you want to save - it could be a letter, a photograph, a word document or anything else from your computer."><sup><b>i</b></sup></a></label>
         <input type="file" class="form-control" name="file" id="file" required>
       </div>
       <button class="button-orange button-hover">Update File</button>
