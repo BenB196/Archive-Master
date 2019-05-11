@@ -82,7 +82,7 @@
                 <td>${file.language}</td>
                 <td>${file.coverage}</td>
                 <td>${file.rights}</td>
-                <td><a href="${baseDownloadUrl}/${file.collectionName}/${file.fileName}"><button class="button-orange button-hover">Download</button></a></td>
+                <td><a href="${baseDownloadUrl}/${file.collectionName}/${file.fileName}"><button class="button-orange button-hover">Download File</button></a></td>
             </tr>
         </c:forEach>
         </tbody>

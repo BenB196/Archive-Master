@@ -35,7 +35,7 @@
 
     <div class="text-center">
         <form action="${pageContext.request.contextPath}/addRecord" method="post" enctype="multipart/form-data">
-            <button class="button-orange button-hover" type="submit" value="${collection.name}" name="addFile">Add File</button>
+            <button class="button-orange button-hover" type="submit" value="${collection.name}" name="addFile">Add File to Collection</button>
         </form>
     </div>
 
@@ -57,7 +57,7 @@
                     <td>${file.title}</td>
                     <td>${file.creator}</td>
                     <td>${file.description}</td>
-                    <td><button class="button-orange button-hover" type="submit" name="editFile" value="${collection.name}/${file.fileName}">Edit</button></td>
+                    <td><button class="button-orange button-hover" type="submit" name="editFile" value="${collection.name}/${file.fileName}">Edit File</button></td>
                 </tr>
             </c:forEach>
             </tbody>

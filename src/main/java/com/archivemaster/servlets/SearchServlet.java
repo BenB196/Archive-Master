@@ -47,6 +47,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "collectionDescription":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getCollectionName() != null && !fedoraFile.getCollectionName().isEmpty()) {
@@ -60,6 +61,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "fileName":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getFileName() != null && !fedoraFile.getFileName().isEmpty()) {
@@ -70,6 +72,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "creator":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getCreator() != null && !fedoraFile.getCreator().isEmpty()) {
@@ -80,6 +83,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "subject":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getSubject() != null && !fedoraFile.getSubject().isEmpty()) {
@@ -90,6 +94,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "fileDescription":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getDescription() != null && !fedoraFile.getDescription().isEmpty()) {
@@ -100,6 +105,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "publisher":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getPublisher() != null && !fedoraFile.getPublisher().isEmpty()) {
@@ -110,6 +116,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "contributor":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getContributor() != null && !fedoraFile.getContributor().isEmpty()) {
@@ -120,6 +127,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "date":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getsDate() != null && !fedoraFile.getsDate().isEmpty()) {
@@ -130,6 +138,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "identifier":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getIdentifier() != null && !fedoraFile.getIdentifier().isEmpty()) {
@@ -140,6 +149,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "source":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getSource() != null && !fedoraFile.getSource().isEmpty()) {
@@ -150,6 +160,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "language":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getLanguage() != null && !fedoraFile.getLanguage().isEmpty()) {
@@ -160,6 +171,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "coverage":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getCoverage() != null && !fedoraFile.getCoverage().isEmpty()) {
@@ -170,6 +182,7 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
+						break;
 					case "rights":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							if (fedoraFile.getRights() != null && !fedoraFile.getRights().isEmpty()) {
@@ -180,7 +193,8 @@ public class SearchServlet extends HttpServlet {
 								}
 							}
 						}
-					default:
+						break;
+					case "all":
 						for (FedoraFile fedoraFile : fedoraFiles) {
 							Boolean resultFound = false;
 
@@ -256,6 +270,14 @@ public class SearchServlet extends HttpServlet {
 	}
 
 	private static boolean checkResultFound(boolean resultFound, String s, String filter) {
-		return resultFound ? true : (!isEmptyString(s) ? ignoreCaseMatch(s, filter) : false);
+		if (!resultFound) {
+			if (!isEmptyString(s)) {
+				return (ignoreCaseMatch(s, filter));
+			} else {
+				return false;
+			}
+		}
+		return true;
+		//return resultFound || (!isEmptyString(s) ? ignoreCaseMatch(s, filter) : false);
 	}
 }

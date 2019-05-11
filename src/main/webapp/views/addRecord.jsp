@@ -31,32 +31,32 @@
       </div>
       -->
       <div class="form-group">
-        <label for="collectionName">Collection Name</label>
+        <label for="collectionName">Collection Name <a href="#" data-toggle="tooltip" data-placement="top" title="The collection that the current record belongs to."><sup><b>i</b></sup></a></label>
         <input type="text" class="form-control" name="collectionName" value="${collectionName}" id="collectionName" readonly>
       </div>
       <div class="form-group">
-        <label for="creator">Creator</label>
-        <input type="text" class="form-control" name="creator" id="creator" required>
+        <label for="creator">Creator <a href="#" data-toggle="tooltip" data-placement="top" title="The person or organization who created the resource."><sup><b>i</b></sup></a></label>
+        <input type="text" class="form-control" name="creator" id="creator">
       </div>
       <div class="form-group">
         <label for="subject">Subject</label>
-        <input type="text" class="form-control" name="subject" id="subject" required>
+        <input type="text" class="form-control" name="subject" id="subject">
       </div>
       <div class="form-group">
-        <label for="description">Description</label>
-        <input type="text" class="form-control" name="description" id="description" required>
+        <label for="description">Description <a href="#" data-toggle="tooltip" data-placement="top" title="A description of the resource's content."><sup><b>i</b></sup></a></label>
+        <input type="text" class="form-control" name="description" id="description">
       </div>
       <div class="form-group">
-        <label for="publisher">Publisher</label>
-        <input type="text" class="form-control" name="publisher" id="publisher" required>
+        <label for="publisher">Publisher <a href="#" data-toggle="tooltip" data-placement="top" title="The organization that published the resource."><sup><b>i</b></sup></a></label>
+        <input type="text" class="form-control" name="publisher" id="publisher">
       </div>
       <div class="form-group">
-        <label for="contributor">Contributor</label>
-        <input type="text" class="form-control" name="contributor" id="contributor" required>
+        <label for="contributor">Contributor <a href="#" data-toggle="tooltip" data-placement="top" title="People or organizations, other than the creator, that made significant contributions to the creation or availability of the resource."><sup><b>i</b></sup></a></label>
+        <input type="text" class="form-control" name="contributor" id="contributor">
       </div>
       <div class="form-group">
         <label for="sDate">Date</label>
-        <input type="text" class="form-control" name="sDate" id="sDate" required>
+        <input type="text" class="form-control" name="sDate" id="sDate">
       </div>
       <!--
       <div class="form-group">
@@ -69,16 +69,16 @@
       </div>
       -->
       <div class="form-group">
-        <label for="identifier">Identifier</label>
-        <input type="text" class="form-control" name="identifier" id="identifier" required>
+        <label for="identifier">Identifier <a href="#" data-toggle="tooltip" data-placement="top" title="The unique identifier of the resource (URL, ISBN, item/serial number, etc.)."><sup><b>i</b></sup></a></label>
+        <input type="text" class="form-control" name="identifier" id="identifier">
       </div>
       <div class="form-group">
         <label for="source">Source</label>
-        <input type="text" class="form-control" name="source" id="source" required>
+        <input type="text" class="form-control" name="source" id="source">
       </div>
       <div class="form-group">
         <label for="language">Language</label>
-        <input type="text" class="form-control" name="language" id="language" required>
+        <input type="text" class="form-control" name="language" id="language">
       </div>
       <!--
       <div class="form-group">
@@ -88,17 +88,17 @@
       -->
       <div class="form-group">
         <label for="coverage">Coverage</label>
-        <input type="text" class="form-control" name="coverage" id="coverage" required>
+        <input type="text" class="form-control" name="coverage" id="coverage">
       </div>
       <div class="form-group">
         <label for="rights">Rights</label>
-        <input type="text" class="form-control" name="rights" id="rights" required>
+        <input type="text" class="form-control" name="rights" id="rights">
       </div>
       <div class="form-group">
-        <label for="file">Select File</label>
+        <label for="file">Select File <a href="#" data-toggle="tooltip" data-placement="top" title="Any digital file you want to save - it could be a letter, a photograph, a word document or anything else from your computer."><sup><b>i</b></sup></a></label>
         <input type="file" class="form-control" name="file" id="file" required>
       </div>
-      <button class="button-orange button-hover">Submit</button>
+      <button class="button-orange button-hover">Add File</button>
     </form>
   </div>
 
